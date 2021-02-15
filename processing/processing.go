@@ -16,7 +16,7 @@ func main() {
 
 	config, err := configPackage.Parse()
 	if err != nil {
-		logErrorAndExit("Could not parse command line arguments: %s", err)
+		logErrorAndExit("Could not parse command line arguments.\n%s", err)
 	}
 
 	err = kaspad_sync.Start(config.RPCServerAddress)

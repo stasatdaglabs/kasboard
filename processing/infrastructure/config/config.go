@@ -6,7 +6,8 @@ import (
 )
 
 type Config struct {
-	RPCServerAddress string `long:"rpcserver" description:"Kaspad RPC server to connect to"`
+	RPCServerAddress         string `long:"rpc-server" description:"Kaspad RPC server to connect to. Should be of the form: <host>:<port>"`
+	DatabaseConnectionString string `long:"connection-string" description:"Connection string for PostgrSQL database to connect to. Should be of the form: postgres://<username>:<password>@<host>:<port>/<database name>"`
 }
 
 func Parse() (*Config, error) {
@@ -18,7 +19,10 @@ func Parse() (*Config, error) {
 	}
 
 	if config.RPCServerAddress == "" {
-		return nil, errors.Errorf("--rpcserver is required.")
+		return nil, errors.Errorf("--rpc-server is required.")
+	}
+	if config.DatabaseConnectionString == "" {
+		return nil, errors.Errorf("--connection-string is required")
 	}
 
 	return config, nil
