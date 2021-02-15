@@ -8,16 +8,13 @@ import (
 
 var log = logging.Logger()
 
-// interruptSignals defines the signals to catch in order to do a proper shutdown
-var interruptSignals = []os.Signal{os.Interrupt}
-
-// InterruptListener listens for OS Signals such as SIGINT (Ctrl+C).
+// InterruptListener listens for SIGINT (Ctrl+C).
 // It returns a channel that is closed when either signal is received.
 func InterruptListener() chan struct{} {
 	interruptChan := make(chan struct{})
 	go func() {
 		interruptChannel := make(chan os.Signal, 1)
-		signalPackage.Notify(interruptChannel, interruptSignals...)
+		signalPackage.Notify(interruptChannel, os.Interrupt)
 
 		select {
 		case signal := <-interruptChannel:
