@@ -16,6 +16,7 @@ const (
 
 var (
 	backendLog = logger.NewBackend()
+	log        = backendLog.Logger("KSBD")
 )
 
 func init() {
@@ -37,6 +38,6 @@ func init() {
 	}
 }
 
-func Backend() *logger.Backend {
-	return backendLog
+func Logger() *logger.Logger {
+	return log
 }
