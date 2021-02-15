@@ -3,7 +3,7 @@ package interrupt
 import (
 	"github.com/stasatdaglabs/kashboard/processing/infrastructure/logging"
 	"os"
-	signalPackage "os/signal"
+	"os/signal"
 )
 
 var log = logging.Logger()
@@ -14,11 +14,11 @@ func InterruptListener() chan struct{} {
 	interruptChan := make(chan struct{})
 	go func() {
 		interruptChannel := make(chan os.Signal, 1)
-		signalPackage.Notify(interruptChannel, os.Interrupt)
+		signal.Notify(interruptChannel, os.Interrupt)
 
 		select {
-		case signal := <-interruptChannel:
-			log.Infof("Received signal (%s). Shutting down...", signal)
+		case <-interruptChannel:
+			log.Infof("Shutting down...")
 		}
 		close(interruptChan)
 	}()
