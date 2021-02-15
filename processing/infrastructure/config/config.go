@@ -22,7 +22,7 @@ func Parse() (*Config, error) {
 		return nil, errors.Errorf("--rpc-server is required.")
 	}
 	if config.DatabaseConnectionString == "" {
-		return nil, errors.Errorf("--connection-string is required")
+		return nil, errors.Errorf("--connection-string is required.")
 	}
 
 	return config, nil
