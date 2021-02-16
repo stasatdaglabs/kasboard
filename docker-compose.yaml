@@ -1,0 +1,35 @@
+version: '3'
+services:
+  postgres:
+    image: "postgres:latest"
+    environment:
+      - POSTGRES_USER=root
+      - POSTGRES_PASSWORD=pass
+      - POSTGRES_DB=kashboard
+    user: root
+    network_mode: host
+    ports:
+      - "5432:5432"
+
+  kaspad:
+    image: "kaspad:latest"
+    command:
+      - "/app/kaspad"
+      - "--testnet"
+      - "--dnsseed=testnet-2-dnsseed.daglabs-dev.com"
+    user: root
+    network_mode: host
+    ports:
+      - "16210:16210"
+
+  processing:
+    image: "kashboard-processing:latest"
+    depends_on:
+      - kaspad
+      - postgres
+    command:
+      - "/app/processing"
+      - "--rpc-server=localhost:16210"
+      - "--connection-string=postgres://root:pass@localhost:5432/kashboard?sslmode=disable"
+    network_mode: host
+    user: root
