@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/go-pg/pg/v9"
 	"github.com/pkg/errors"
+	"github.com/stasatdaglabs/kashboard/processing/database/model"
 	"github.com/stasatdaglabs/kashboard/processing/infrastructure/logging"
 	"strings"
 )
@@ -15,10 +16,6 @@ var (
 		"Etc/UTC": {},
 	}
 )
-
-type Database struct {
-	database *pg.DB
-}
 
 // Connect connects to the database mentioned in the config variable.
 func Connect(connectionString string) (*Database, error) {
@@ -78,6 +75,14 @@ func allowedTimezonesString() string {
 		keys = append(keys, fmt.Sprintf("'%s'", allowedTimeZone))
 	}
 	return strings.Join(keys, ", ")
+}
+
+type Database struct {
+	database *pg.DB
+}
+
+func (db *Database) InsertBlock(block *model.Block) error {
+	return db.database.Insert(block)
 }
 
 func (db *Database) Close() {
