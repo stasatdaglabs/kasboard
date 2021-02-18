@@ -1,9 +1,9 @@
-import Head from 'next/head'
-import styles from '../styles/Home.module.css'
+import Head from 'next/head';
+import styles from '../styles/Home.module.css';
 import {GetServerSideProps} from "next";
 import {getGreatestBlueScore} from "../scripts/database";
 
-const Home = ({greatestBlueScore}) => {
+const Home = ({greatestBlueScore}: HomeProps) => {
     return (
         <div className={styles.container}>
             <Head>
@@ -16,9 +16,13 @@ const Home = ({greatestBlueScore}) => {
             Greatest blue score: {greatestBlueScore}
         </div>
     )
-}
+};
 
 export default Home;
+
+type HomeProps = {
+    greatestBlueScore: Number,
+};
 
 export const getServerSideProps: GetServerSideProps = async () => {
     const greatestBlueScore = await getGreatestBlueScore();
@@ -28,4 +32,4 @@ export const getServerSideProps: GetServerSideProps = async () => {
             greatestBlueScore: greatestBlueScore
         }
     }
-}
+};
