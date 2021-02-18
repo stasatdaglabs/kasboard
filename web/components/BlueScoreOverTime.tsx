@@ -1,5 +1,6 @@
 import {Bar} from "react-chartjs-2";
 import {BlueScoreOverTimeData} from "../scripts/database";
+import {timestampToString} from "../scripts/date";
 
 export type BlueScoreOverTimeChartProps = {
     blueScoreOverTime: BlueScoreOverTimeData,
@@ -7,10 +8,10 @@ export type BlueScoreOverTimeChartProps = {
 
 const BlueScoreOverTime = ({blueScoreOverTime}: BlueScoreOverTimeChartProps) => {
     const blueScoreOverTimeData = {
-        labels: blueScoreOverTime.map(item => new Date(item.timestamp / 1000)),
+        labels: blueScoreOverTime.map(item => timestampToString(item.timestamp)),
         datasets: [
             {
-                data: blueScoreOverTime.map(item => item.blue_score),
+                data: blueScoreOverTime.map(item => item.blueScore),
             },
         ],
     };
@@ -26,9 +27,6 @@ const BlueScoreOverTime = ({blueScoreOverTime}: BlueScoreOverTimeChartProps) => 
                 },
             ],
         },
-        tooltips: {
-            enabled: false,
-        }
     };
 
     return (

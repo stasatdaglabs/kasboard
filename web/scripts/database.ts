@@ -1,7 +1,7 @@
 import {Client} from "pg"
 
 export type BlueScoreOverTimeData = [{
-    blue_score: number,
+    blueScore: number,
     timestamp: number,
 }];
 
@@ -11,5 +11,13 @@ export async function getBlueScoreOverTime(): Promise<BlueScoreOverTimeData> {
     const result = await client.query("SELECT blue_score, timestamp FROM blocks ORDER BY timestamp DESC LIMIT 100");
     await client.end();
 
-    return result.rows.reverse();
+    const structuredResult = result.rows.map(item => {
+        return {
+            blueScore: parseInt(item.blue_score),
+            timestamp: parseInt(item.timestamp),
+        };
+    });
+    structuredResult.reverse();
+
+    return structuredResult;
 }

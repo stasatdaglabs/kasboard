@@ -16,7 +16,9 @@ const Home = ({blueScoreOverTime}: HomeProps) => {
                 <link rel="icon" href="/favicon.ico"/>
             </Head>
 
-            <BlueScoreOverTime blueScoreOverTime={blueScoreOverTime}/>
+            <div className={styles.blueScoreOverTime}>
+                <BlueScoreOverTime blueScoreOverTime={blueScoreOverTime}/>
+            </div>
         </div>
     )
 };
