@@ -1,10 +1,10 @@
 import {Client} from "pg"
 
-export async function getGreatestBlueScore() {
+export async function getBlueScoreOverTime() {
     const client = new Client();
     await client.connect();
-    const result = await client.query("SELECT MAX(blue_score) AS blue_score FROM blocks");
+    const result = await client.query("SELECT blue_score, timestamp FROM blocks ORDER BY timestamp DESC LIMIT 100");
     await client.end();
 
-    return result.rows[0].blue_score ?? 0;
+    return result.rows.reverse();
 }
