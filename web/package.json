@@ -13,6 +13,7 @@
     "next": "10.0.7",
     "pg": "^8.5.1",
     "react": "17.0.1",
+    "react-chartjs-2": "^2.11.1",
     "react-dom": "17.0.1"
   },
   "devDependencies": {
