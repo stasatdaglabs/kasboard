@@ -1,6 +1,7 @@
 import '../styles/globals.css'
+import { AppProps } from "next/app";
 
-function Kashboard({Component, pageProps}) {
+const Kashboard = ({Component, pageProps}: AppProps) => {
     return <Component {...pageProps} />
 }
 
