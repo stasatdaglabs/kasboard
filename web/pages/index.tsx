@@ -1,9 +1,9 @@
 import Head from 'next/head'
 import styles from '../styles/Home.module.css'
 import {GetServerSideProps} from "next";
-import {Client} from "pg"
+import {getGreatestBlueScore} from "../scripts/database";
 
-const Home = ({now}) => {
+const Home = ({greatestBlueScore}) => {
     return (
         <div className={styles.container}>
             <Head>
@@ -13,7 +13,7 @@ const Home = ({now}) => {
 
             Hello world!
             <br/>
-            Blue score: {now}
+            Greatest blue score: {greatestBlueScore}
         </div>
     )
 }
@@ -21,16 +21,11 @@ const Home = ({now}) => {
 export default Home;
 
 export const getServerSideProps: GetServerSideProps = async () => {
-    const client = new Client();
-    await client.connect();
-    const result = await client.query("SELECT MAX(blue_score) AS blue_score FROM blocks");
-    await client.end();
-
-    const now = result.rows[0].blue_score;
+    const greatestBlueScore = await getGreatestBlueScore();
 
     return {
         props: {
-            now: now
+            greatestBlueScore: greatestBlueScore
         }
     }
 }
