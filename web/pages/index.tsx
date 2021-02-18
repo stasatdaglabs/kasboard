@@ -1,32 +1,14 @@
 import Head from 'next/head';
 import styles from '../styles/Home.module.css';
 import {GetServerSideProps} from "next";
-import {getBlueScoreOverTime} from "../scripts/database";
-import {Bar} from "react-chartjs-2";
+import {BlueScoreOverTimeData, getBlueScoreOverTime} from "../scripts/database";
+import BlueScoreOverTime from "../components/BlueScoreOverTime";
+
+type HomeProps = {
+    blueScoreOverTime: BlueScoreOverTimeData,
+};
 
 const Home = ({blueScoreOverTime}: HomeProps) => {
-    const blueScoreOverTimeData = {
-        labels: blueScoreOverTime.map(item => new Date(item.timestamp / 1000)),
-        datasets: [
-            {
-                data: blueScoreOverTime.map(item => item.blue_score),
-            },
-        ],
-    };
-
-    const blueScoreOverTimeOptions = {
-        legend: {
-            display: false,
-        },
-        scales: {
-            xAxes: [
-                {
-                    display: false,
-                },
-            ],
-        },
-    };
-
     return (
         <div className={styles.container}>
             <Head>
@@ -34,19 +16,12 @@ const Home = ({blueScoreOverTime}: HomeProps) => {
                 <link rel="icon" href="/favicon.ico"/>
             </Head>
 
-            <Bar data={blueScoreOverTimeData} options={blueScoreOverTimeOptions}/>
+            <BlueScoreOverTime blueScoreOverTime={blueScoreOverTime}/>
         </div>
     )
 };
 
 export default Home;
-
-type HomeProps = {
-    blueScoreOverTime: [{
-        blue_score: number,
-        timestamp: number,
-    }],
-};
 
 export const getServerSideProps: GetServerSideProps = async () => {
     const blueScoreOverTime = await getBlueScoreOverTime();
