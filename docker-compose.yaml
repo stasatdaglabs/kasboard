@@ -32,3 +32,20 @@ services:
       - "--connection-string=postgres://root:pass@localhost:5432/kashboard?sslmode=disable"
     network_mode: host
     user: root
+
+  web:
+    image: "kashboard-web:latest"
+    depends_on:
+      - kaspad
+      - postgres
+    command:
+      - "npx"
+      - "next"
+      - "start"
+    environment:
+      - PGUSER=root
+      - PGPASSWORD=pass
+      - PGDATABASE=kashboard
+      - PGPORT=5432
+    network_mode: host
+    user: root
