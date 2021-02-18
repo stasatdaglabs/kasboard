@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "@material-ui/core": "^4.11.3",
+    "chart.js": "^2.9.4",
     "next": "10.0.7",
     "pg": "^8.5.1",
     "react": "17.0.1",
