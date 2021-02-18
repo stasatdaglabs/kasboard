@@ -85,15 +85,6 @@ func (db *Database) InsertBlock(block *model.Block) error {
 	return db.database.Insert(block)
 }
 
-func (db *Database) GreatestBlueScore() (uint64, error) {
-	var result struct{ BlueScore uint64 }
-	_, err := db.database.QueryOne(&result, "SELECT MAX(blue_score) AS blue_score FROM blocks")
-	if err != nil {
-		return 0, err
-	}
-	return result.BlueScore, nil
-}
-
 func (db *Database) Close() {
 	_ = db.database.Close()
 }

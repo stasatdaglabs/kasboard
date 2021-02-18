@@ -17,12 +17,6 @@ func Start(rpcServerAddress string, database *database.Database) error {
 		return errors.Errorf("Could not connect to the Kaspad RPC server at %s: %s", rpcServerAddress, err)
 	}
 
-	greatestBlueScore, err := database.GreatestBlueScore()
-	if err != nil {
-		return err
-	}
-	log.Infof("Greatest blue score: %d", greatestBlueScore)
-
 	return client.RegisterForBlockAddedNotifications(func(notification *appmessage.BlockAddedNotificationMessage) {
 		handleBlockAddedNotifications(database, notification)
 	})
@@ -32,6 +26,7 @@ func handleBlockAddedNotifications(database *database.Database, notification *ap
 	block := &model.Block{
 		BlockHash: notification.BlockVerboseData.Hash,
 		BlueScore: notification.BlockVerboseData.BlueScore,
+		Timestamp: notification.BlockVerboseData.Time,
 	}
 	err := database.InsertBlock(block)
 	if err != nil {
