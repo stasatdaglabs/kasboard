@@ -11,8 +11,6 @@ const Home = ({greatestBlueScore}: HomeProps) => {
                 <link rel="icon" href="/favicon.ico"/>
             </Head>
 
-            Hello world!
-            <br/>
             Greatest blue score: {greatestBlueScore}
         </div>
     )

@@ -6,5 +6,5 @@ export async function getGreatestBlueScore() {
     const result = await client.query("SELECT MAX(blue_score) AS blue_score FROM blocks");
     await client.end();
 
-    return result.rows[0].blue_score;
+    return result.rows[0].blue_score ?? 0;
 }
