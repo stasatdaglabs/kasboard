@@ -1,7 +1,7 @@
 version: '3'
 services:
   postgres:
-    image: "postgres:latest"
+    image: "postgres:13.2"
     environment:
       - POSTGRES_USER=root
       - POSTGRES_PASSWORD=pass
@@ -10,16 +10,6 @@ services:
     network_mode: host
     ports:
       - "5432:5432"
-
-  grafana:
-    image: "kashboard-grafana:latest"
-    environment:
-      - GRAFANA_ADMIN_USERNAME=user
-      - GRAFANA_ADMIN_PASSWORD=pass
-    network_mode: host
-    user: root
-    ports:
-      - "3000:3000"
 
   kaspad:
     image: "kaspad:latest"
@@ -43,19 +33,12 @@ services:
     network_mode: host
     user: root
 
-  web:
-    image: "kashboard-web:latest"
-    depends_on:
-      - kaspad
-      - postgres
-    command:
-      - "npx"
-      - "next"
-      - "start"
+  grafana:
+    image: "kashboard-grafana:latest"
     environment:
-      - PGUSER=root
-      - PGPASSWORD=pass
-      - PGDATABASE=kashboard
-      - PGPORT=5432
+      - GRAFANA_ADMIN_USERNAME=user
+      - GRAFANA_ADMIN_PASSWORD=pass
     network_mode: host
     user: root
+    ports:
+      - "3000:3000"
