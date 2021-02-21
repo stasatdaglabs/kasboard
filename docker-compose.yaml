@@ -49,3 +49,10 @@ services:
       - PGPORT=5432
     network_mode: host
     user: root
+
+  grafana:
+    image: "kashboard-grafana:latest"
+    network_mode: host
+    user: root
+    ports:
+      - "3000:3000"
