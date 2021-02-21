@@ -40,6 +40,10 @@ services:
     environment:
       - GRAFANA_ADMIN_USERNAME=user
       - GRAFANA_ADMIN_PASSWORD=pass
+      - POSTGRES_URL=localhost:5432
+      - POSTGRES_USER=root
+      - POSTGRES_PASSWORD=pass
+      - POSTGRES_DB=kashboard
     network_mode: host
     user: root
     ports:

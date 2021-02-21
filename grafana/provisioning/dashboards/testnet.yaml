@@ -1,0 +1,7 @@
+apiVersion: 1
+
+providers:
+  - name: Testnet
+    type: file
+    options:
+      path: testnet.json

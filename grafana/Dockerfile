@@ -1,6 +1,5 @@
 FROM grafana/grafana:7.4.2
 
-COPY grafana/grafana.ini /etc/grafana/grafana.ini
-
-WORKDIR /app
-COPY grafana/dashboard.json .
+COPY grafana/grafana.ini ${GF_PATHS_CONFIG}
+COPY grafana/testnet.json ${GF_PATHS_HOME}
+COPY grafana/provisioning ${GF_PATHS_PROVISIONING}
