@@ -11,6 +11,16 @@ services:
     ports:
       - "5432:5432"
 
+  grafana:
+    image: "kashboard-grafana:latest"
+    environment:
+      - GRAFANA_ADMIN_USERNAME=user
+      - GRAFANA_ADMIN_PASSWORD=pass
+    network_mode: host
+    user: root
+    ports:
+      - "3000:3000"
+
   kaspad:
     image: "kaspad:latest"
     command:
@@ -49,10 +59,3 @@ services:
       - PGPORT=5432
     network_mode: host
     user: root
-
-  grafana:
-    image: "kashboard-grafana:latest"
-    network_mode: host
-    user: root
-    ports:
-      - "3000:3000"
