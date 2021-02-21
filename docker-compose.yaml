@@ -35,6 +35,8 @@ services:
 
   grafana:
     image: "kashboard-grafana:latest"
+    depends_on:
+      - postgres
     environment:
       - GRAFANA_ADMIN_USERNAME=user
       - GRAFANA_ADMIN_PASSWORD=pass
