@@ -1,11 +1,20 @@
 {
   "annotations": {
-    "list": []
+    "list": [
+      {
+        "builtIn": 1,
+        "datasource": "-- Grafana --",
+        "enable": true,
+        "hide": true,
+        "iconColor": "rgba(0, 211, 255, 1)",
+        "name": "Annotations & Alerts",
+        "type": "dashboard"
+      }
+    ]
   },
-  "editable": false,
+  "editable": true,
   "gnetId": null,
   "graphTooltip": 0,
-  "id": null,
   "links": [],
   "panels": [
     {
@@ -56,15 +65,34 @@
       "steppedLine": false,
       "targets": [
         {
+          "format": "time_series",
+          "group": [],
+          "metricColumn": "none",
           "queryType": "randomWalk",
-          "refId": "A"
+          "rawQuery": false,
+          "rawSql": "SELECT\n  \"timestamp\" AS \"time\",\n  blue_score\nFROM blocks\nORDER BY 1",
+          "refId": "A",
+          "select": [
+            [
+              {
+                "params": [
+                  "blue_score"
+                ],
+                "type": "column"
+              }
+            ]
+          ],
+          "table": "blocks",
+          "timeColumn": "\"timestamp\"",
+          "timeColumnType": "int8",
+          "where": []
         }
       ],
       "thresholds": [],
       "timeFrom": null,
       "timeRegions": [],
       "timeShift": null,
-      "title": "Panel Title",
+      "title": "Blue Score",
       "tooltip": {
         "shared": true,
         "sort": 0,
@@ -115,5 +143,6 @@
   "timepicker": {},
   "timezone": "browser",
   "title": "Kaspa Testnet",
+  "uid": "dYWAHnyMk",
   "version": 1
 }
