@@ -48,10 +48,11 @@ func handleBlockAddedNotifications(config *config.Config, database *database.Dat
 	}
 
 	block := &model.Block{
-		BlockHash: notification.BlockVerboseData.Hash,
-		BlueScore: notification.BlockVerboseData.BlueScore,
-		Timestamp: notification.BlockVerboseData.Time,
-		Hashrate:  hashrate,
+		BlockHash:    notification.BlockVerboseData.Hash,
+		BlueScore:    notification.BlockVerboseData.BlueScore,
+		Timestamp:    notification.BlockVerboseData.Time,
+		Hashrate:     hashrate,
+		ParentAmount: uint16(len(notification.BlockVerboseData.ParentHashes)),
 	}
 	err = database.InsertBlock(block)
 	if err != nil {
