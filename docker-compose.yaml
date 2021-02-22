@@ -11,16 +11,6 @@ services:
     ports:
       - "5432:5432"
 
-  kaspad:
-    image: "kaspad:latest"
-    command:
-      - "/app/kaspad"
-      - "--devnet"
-    user: root
-    network_mode: host
-    ports:
-      - "16610:16610"
-
   processing:
     image: "kashboard-processing:latest"
     depends_on:
