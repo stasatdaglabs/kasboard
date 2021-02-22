@@ -3,23 +3,20 @@ services:
   postgres:
     image: "postgres:13.2"
     environment:
-      - POSTGRES_USER=root
-      - POSTGRES_PASSWORD=pass
-      - POSTGRES_DB=kashboard
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DB=${POSTGRES_DB}
     user: root
     network_mode: host
-    ports:
-      - "5432:5432"
 
   processing:
     image: "kashboard-processing:latest"
     depends_on:
-      - kaspad
       - postgres
     command:
       - "/app/processing"
-      - "--rpc-server=localhost:16610"
-      - "--connection-string=postgres://root:pass@localhost:5432/kashboard?sslmode=disable"
+      - "--rpc-server=${KASPAD_ADDRESS}"
+      - "--connection-string=postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@localhost:5432/${POSTGRES_DB}?sslmode=disable"
     network_mode: host
     user: root
 
@@ -28,13 +25,11 @@ services:
     depends_on:
       - postgres
     environment:
-      - GRAFANA_ADMIN_USERNAME=user
-      - GRAFANA_ADMIN_PASSWORD=pass
+      - GRAFANA_ADMIN_USERNAME=${GRAFANA_ADMIN_USERNAME}
+      - GRAFANA_ADMIN_PASSWORD=${GRAFANA_ADMIN_PASSWORD}
       - POSTGRES_URL=localhost:5432
-      - POSTGRES_USER=root
-      - POSTGRES_PASSWORD=pass
-      - POSTGRES_DB=kashboard
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DB=${POSTGRES_DB}
     network_mode: host
     user: root
-    ports:
-      - "3000:3000"
