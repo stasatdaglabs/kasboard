@@ -137,7 +137,8 @@
       "datasource": null,
       "fieldConfig": {
         "defaults": {
-          "custom": {}
+          "custom": {},
+          "unit": "Hs"
         },
         "overrides": []
       },
@@ -220,7 +221,7 @@
       },
       "yaxes": [
         {
-          "format": "short",
+          "format": "Hs",
           "label": null,
           "logBase": 1,
           "max": null,
