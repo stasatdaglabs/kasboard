@@ -36,11 +36,18 @@ func handleBlock(database *database.Database, block *model.Block) error {
 	}
 	blockRate := float64(blockCount) / durationForAnalysis.Seconds()
 
+	transactionCount, err := database.TransactionCount(block, durationForAnalysis)
+	if err != nil {
+		return err
+	}
+	transactionRate := float64(transactionCount) / durationForAnalysis.Seconds()
+
 	analyzedBlock := &model.AnalyzedBlock{
 		ID:                  block.ID,
 		Timestamp:           block.Timestamp,
 		AverageParentAmount: averageParentAmount,
 		BlockRate:           blockRate,
+		TransactionRate:     transactionRate,
 	}
 	return database.InsertAnalyzedBlock(analyzedBlock)
 }

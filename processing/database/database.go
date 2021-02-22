@@ -87,9 +87,9 @@ func (db *Database) InsertBlock(block *model.Block) error {
 	return db.database.Insert(block)
 }
 
-func (db *Database) AverageParentAmount(block *model.Block, durationForAverage time.Duration) (float64, error) {
-	endTimestamp := mstime.UnixMilliseconds(block.Timestamp)
-	startTimestamp := endTimestamp.Add(-durationForAverage)
+func (db *Database) AverageParentAmount(fromBlock *model.Block, duration time.Duration) (float64, error) {
+	endTimestamp := mstime.UnixMilliseconds(fromBlock.Timestamp)
+	startTimestamp := endTimestamp.Add(-duration)
 
 	var result struct {
 		Average float64
@@ -102,14 +102,29 @@ func (db *Database) AverageParentAmount(block *model.Block, durationForAverage t
 	return result.Average, nil
 }
 
-func (db *Database) BlockCount(block *model.Block, durationForAverage time.Duration) (uint64, error) {
-	endTimestamp := mstime.UnixMilliseconds(block.Timestamp)
-	startTimestamp := endTimestamp.Add(-durationForAverage)
+func (db *Database) BlockCount(fromBlock *model.Block, duration time.Duration) (uint64, error) {
+	endTimestamp := mstime.UnixMilliseconds(fromBlock.Timestamp)
+	startTimestamp := endTimestamp.Add(-duration)
 
 	var result struct {
 		Count uint64
 	}
 	_, err := db.database.QueryOne(&result, "SELECT COUNT(*) as count FROM blocks WHERE timestamp > ? AND timestamp < ?",
+		startTimestamp.UnixMilliseconds(), endTimestamp.UnixMilliseconds())
+	if err != nil {
+		return 0, err
+	}
+	return result.Count, nil
+}
+
+func (db *Database) TransactionCount(fromBlock *model.Block, duration time.Duration) (uint64, error) {
+	endTimestamp := mstime.UnixMilliseconds(fromBlock.Timestamp)
+	startTimestamp := endTimestamp.Add(-duration)
+
+	var result struct {
+		Count uint64
+	}
+	_, err := db.database.QueryOne(&result, "SELECT SUM(transaction_amount) as count FROM blocks WHERE timestamp > ? AND timestamp < ?",
 		startTimestamp.UnixMilliseconds(), endTimestamp.UnixMilliseconds())
 	if err != nil {
 		return 0, err
