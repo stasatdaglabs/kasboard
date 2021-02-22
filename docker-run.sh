@@ -39,7 +39,7 @@ docker-compose up -d postgres
 sleep 10s
 
 # Start processing
-#docker-compose up -d processing
+docker-compose up -d processing
 
 # Wait for processing to finish initializing
 sleep 10s
