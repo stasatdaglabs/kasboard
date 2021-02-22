@@ -1,7 +1,6 @@
 package hashrate
 
 import (
-	"github.com/kaspanet/kaspad/domain/dagconfig"
 	"github.com/kaspanet/kaspad/util/difficulty"
 	"math/big"
 	"strconv"
@@ -18,7 +17,7 @@ var (
 	oneLsh256 = new(big.Int).Lsh(bigOne, 256)
 )
 
-func hashrate(target *big.Int, TargetTimePerBlock time.Duration) *big.Int {
+func hashrate(target *big.Int, targetTimePerBlock time.Duration) *big.Int {
 	// From: https://bitcoin.stackexchange.com/a/5557/40800
 	// difficulty = hashrate / (2^256 / max_target / block_rate_in_seconds)
 	// hashrate = difficulty * (2^256 / max_target / block_rate_in_seconds)
@@ -28,20 +27,20 @@ func hashrate(target *big.Int, TargetTimePerBlock time.Duration) *big.Int {
 
 	tmp := new(big.Int)
 	divisor := new(big.Int).Set(target)
-	divisor.Mul(divisor, tmp.SetInt64(TargetTimePerBlock.Milliseconds()))
+	divisor.Mul(divisor, tmp.SetInt64(targetTimePerBlock.Milliseconds()))
 	divisor.Div(divisor, tmp.SetInt64(int64(time.Second/time.Millisecond))) // Scale it up to seconds.
 	divisor.Div(oneLsh256, divisor)
 	return divisor
 }
 
 // Hashrate converts the given bits string to hashrate in uint64
-func Hashrate(bits string) (uint64, error) {
+func Hashrate(bits string, targetTimePerBlock time.Duration) (uint64, error) {
 	bitsUint64, err := strconv.ParseUint(bits, 16, 32)
 	if err != nil {
 		return 0, err
 	}
 	bitsUint32 := uint32(bitsUint64)
 	bitsBigInt := difficulty.CompactToBig(bitsUint32)
-	hashrateBigInt := hashrate(bitsBigInt, dagconfig.TestnetParams.TargetTimePerBlock)
+	hashrateBigInt := hashrate(bitsBigInt, targetTimePerBlock)
 	return hashrateBigInt.Uint64(), nil
 }

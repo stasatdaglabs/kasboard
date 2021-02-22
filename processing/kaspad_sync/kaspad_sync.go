@@ -7,6 +7,7 @@ import (
 	"github.com/pkg/errors"
 	"github.com/stasatdaglabs/kashboard/processing/database"
 	"github.com/stasatdaglabs/kashboard/processing/database/model"
+	"github.com/stasatdaglabs/kashboard/processing/infrastructure/config"
 	"github.com/stasatdaglabs/kashboard/processing/infrastructure/logging"
 	hashratePackage "github.com/stasatdaglabs/kashboard/processing/kaspad_sync/hashrate"
 )
@@ -16,10 +17,11 @@ var spawn = panics.GoroutineWrapperFunc(log)
 
 var blockAddedNotifications = make(chan *appmessage.BlockAddedNotificationMessage, 1_000_000)
 
-func Start(rpcServerAddress string, database *database.Database) error {
-	client, err := rpcclient.NewRPCClient(rpcServerAddress)
+func Start(config *config.Config, database *database.Database) error {
+	client, err := rpcclient.NewRPCClient(config.RPCServerAddress)
 	if err != nil {
-		return errors.Errorf("Could not connect to the Kaspad RPC server at %s: %s", rpcServerAddress, err)
+		return errors.Errorf("Could not connect to the Kaspad RPC server at %s: %s",
+			config.RPCServerAddress, err)
 	}
 
 	err = client.RegisterForBlockAddedNotifications(func(notification *appmessage.BlockAddedNotificationMessage) {
@@ -31,14 +33,16 @@ func Start(rpcServerAddress string, database *database.Database) error {
 
 	spawn("handleBlockAddedNotifications", func() {
 		for notification := range blockAddedNotifications {
-			handleBlockAddedNotifications(database, notification)
+			handleBlockAddedNotifications(config, database, notification)
 		}
 	})
 	return nil
 }
 
-func handleBlockAddedNotifications(database *database.Database, notification *appmessage.BlockAddedNotificationMessage) {
-	hashrate, err := hashratePackage.Hashrate(notification.BlockVerboseData.Bits)
+func handleBlockAddedNotifications(config *config.Config, database *database.Database,
+	notification *appmessage.BlockAddedNotificationMessage) {
+
+	hashrate, err := hashratePackage.Hashrate(notification.BlockVerboseData.Bits, config.ActiveNetParams.TargetTimePerBlock)
 	if err != nil {
 		return
 	}

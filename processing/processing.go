@@ -26,7 +26,7 @@ func main() {
 	}
 	defer database.Close()
 
-	err = kaspad_sync.Start(config.RPCServerAddress, database)
+	err = kaspad_sync.Start(config, database)
 	if err != nil {
 		logErrorAndExit("Received error from Kaspad sync: %s", err)
 	}
