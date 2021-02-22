@@ -13,4 +13,5 @@ type AnalyzedBlock struct {
 	ID                  uint64  `pg:",pk"`
 	Timestamp           int64   `pg:",use_zero"`
 	AverageParentAmount float64 `pg:",use_zero"`
+	BlockRate           float64 `pg:",use_zero"`
 }

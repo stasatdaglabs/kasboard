@@ -23,16 +23,24 @@ func Start(database *database.Database, blockChan chan *model.Block) {
 }
 
 func handleBlock(database *database.Database, block *model.Block) error {
-	const durationForAverage = 5 * time.Minute
-	averageParentAmount, err := database.AverageParentAmount(block, durationForAverage)
+	const durationForAnalysis = 1 * time.Minute
+
+	averageParentAmount, err := database.AverageParentAmount(block, durationForAnalysis)
 	if err != nil {
 		return err
 	}
+
+	blockCount, err := database.BlockCount(block, durationForAnalysis)
+	if err != nil {
+		return err
+	}
+	blockRate := float64(blockCount) / durationForAnalysis.Seconds()
 
 	analyzedBlock := &model.AnalyzedBlock{
 		ID:                  block.ID,
 		Timestamp:           block.Timestamp,
 		AverageParentAmount: averageParentAmount,
+		BlockRate:           blockRate,
 	}
 	return database.InsertAnalyzedBlock(analyzedBlock)
 }

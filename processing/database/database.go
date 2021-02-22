@@ -102,6 +102,21 @@ func (db *Database) AverageParentAmount(block *model.Block, durationForAverage t
 	return result.Average, nil
 }
 
+func (db *Database) BlockCount(block *model.Block, durationForAverage time.Duration) (uint64, error) {
+	endTimestamp := mstime.UnixMilliseconds(block.Timestamp)
+	startTimestamp := endTimestamp.Add(-durationForAverage)
+
+	var result struct {
+		Count uint64
+	}
+	_, err := db.database.QueryOne(&result, "SELECT COUNT(*) as count FROM blocks WHERE timestamp > ? AND timestamp < ?",
+		startTimestamp.UnixMilliseconds(), endTimestamp.UnixMilliseconds())
+	if err != nil {
+		return 0, err
+	}
+	return result.Count, nil
+}
+
 func (db *Database) InsertAnalyzedBlock(analyzedBlock *model.AnalyzedBlock) error {
 	return db.database.Insert(analyzedBlock)
 }

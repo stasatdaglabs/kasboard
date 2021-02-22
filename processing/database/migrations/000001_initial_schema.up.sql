@@ -11,8 +11,9 @@ CREATE TABLE blocks
 
 CREATE TABLE analyzed_blocks
 (
-    id                    BIGINT   NOT NULL,
-    timestamp             BIGINT   NOT NULL,
+    id                    BIGINT  NOT NULL,
+    timestamp             BIGINT  NOT NULL,
     average_parent_amount NUMERIC NOT NULL,
+    block_rate            NUMERIC NOT NULL,
     PRIMARY KEY (id)
 )
