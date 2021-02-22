@@ -8,3 +8,11 @@ CREATE TABLE blocks
     parent_amount SMALLINT                       NOT NULL,
     PRIMARY KEY (id)
 );
+
+CREATE TABLE analyzed_blocks
+(
+    id                    BIGINT   NOT NULL,
+    timestamp             BIGINT   NOT NULL,
+    average_parent_amount NUMERIC NOT NULL,
+    PRIMARY KEY (id)
+)

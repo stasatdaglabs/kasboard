@@ -15,36 +15,39 @@ import (
 var log = logging.Logger()
 var spawn = panics.GoroutineWrapperFunc(log)
 
-var blockAddedNotifications = make(chan *appmessage.BlockAddedNotificationMessage, 1_000_000)
-
-func Start(config *config.Config, database *database.Database) error {
+func Start(config *config.Config, database *database.Database) (chan *model.Block, error) {
 	client, err := rpcclient.NewRPCClient(config.RPCServerAddress)
 	if err != nil {
-		return errors.Errorf("Could not connect to the Kaspad RPC server at %s: %s",
+		return nil, errors.Errorf("Could not connect to the Kaspad RPC server at %s: %s",
 			config.RPCServerAddress, err)
 	}
 
+	blockAddedNotifications := make(chan *appmessage.BlockAddedNotificationMessage, config.ActiveNetParams.PruningDepth())
 	err = client.RegisterForBlockAddedNotifications(func(notification *appmessage.BlockAddedNotificationMessage) {
 		blockAddedNotifications <- notification
 	})
 	if err != nil {
-		return err
+		return nil, err
 	}
 
+	blockChan := make(chan *model.Block, config.ActiveNetParams.PruningDepth())
 	spawn("handleBlockAddedNotifications", func() {
 		for notification := range blockAddedNotifications {
-			handleBlockAddedNotifications(config, database, notification)
+			err := handleBlockAddedNotifications(config, database, notification, blockChan)
+			if err != nil {
+				panic(err)
+			}
 		}
 	})
-	return nil
+	return blockChan, nil
 }
 
 func handleBlockAddedNotifications(config *config.Config, database *database.Database,
-	notification *appmessage.BlockAddedNotificationMessage) {
+	notification *appmessage.BlockAddedNotificationMessage, blockChan chan *model.Block) error {
 
 	hashrate, err := hashratePackage.Hashrate(notification.BlockVerboseData.Bits, config.ActiveNetParams.TargetTimePerBlock)
 	if err != nil {
-		return
+		return err
 	}
 
 	block := &model.Block{
@@ -56,7 +59,10 @@ func handleBlockAddedNotifications(config *config.Config, database *database.Dat
 	}
 	err = database.InsertBlock(block)
 	if err != nil {
-		panic(err)
+		return err
 	}
 	log.Infof("Added block %s with blue score %d", block.BlockHash, block.BlueScore)
+
+	blockChan <- block
+	return nil
 }

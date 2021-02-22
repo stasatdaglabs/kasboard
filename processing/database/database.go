@@ -3,10 +3,12 @@ package database
 import (
 	"fmt"
 	"github.com/go-pg/pg/v9"
+	"github.com/kaspanet/kaspad/util/mstime"
 	"github.com/pkg/errors"
 	"github.com/stasatdaglabs/kashboard/processing/database/model"
 	"github.com/stasatdaglabs/kashboard/processing/infrastructure/logging"
 	"strings"
+	"time"
 )
 
 var (
@@ -83,6 +85,25 @@ type Database struct {
 
 func (db *Database) InsertBlock(block *model.Block) error {
 	return db.database.Insert(block)
+}
+
+func (db *Database) AverageParentAmount(block *model.Block, durationForAverage time.Duration) (float64, error) {
+	endTimestamp := mstime.UnixMilliseconds(block.Timestamp)
+	startTimestamp := endTimestamp.Add(-durationForAverage)
+
+	var result struct {
+		Average float64
+	}
+	_, err := db.database.QueryOne(&result, "SELECT AVG(parent_amount) as average FROM blocks WHERE timestamp > ? AND timestamp < ?",
+		startTimestamp.UnixMilliseconds(), endTimestamp.UnixMilliseconds())
+	if err != nil {
+		return 0, err
+	}
+	return result.Average, nil
+}
+
+func (db *Database) InsertAnalyzedBlock(analyzedBlock *model.AnalyzedBlock) error {
+	return db.database.Insert(analyzedBlock)
 }
 
 func (db *Database) Close() {

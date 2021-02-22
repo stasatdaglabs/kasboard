@@ -1,6 +1,7 @@
 package main
 
 import (
+	"github.com/stasatdaglabs/kashboard/processing/analysis"
 	databasePackage "github.com/stasatdaglabs/kashboard/processing/database"
 	configPackage "github.com/stasatdaglabs/kashboard/processing/infrastructure/config"
 	interruptPackage "github.com/stasatdaglabs/kashboard/processing/infrastructure/interrupt"
@@ -26,10 +27,11 @@ func main() {
 	}
 	defer database.Close()
 
-	err = kaspad_sync.Start(config, database)
+	blockChan, err := kaspad_sync.Start(config, database)
 	if err != nil {
 		logErrorAndExit("Received error from Kaspad sync: %s", err)
 	}
+	analysis.Start(database, blockChan)
 
 	<-interrupt
 }

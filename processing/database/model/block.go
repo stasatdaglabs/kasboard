@@ -8,3 +8,9 @@ type Block struct {
 	Hashrate     uint64 `pg:",use_zero"`
 	ParentAmount uint16 `pg:",use_zero"`
 }
+
+type AnalyzedBlock struct {
+	ID                  uint64  `pg:",pk"`
+	Timestamp           int64   `pg:",use_zero"`
+	AverageParentAmount float64 `pg:",use_zero"`
+}
