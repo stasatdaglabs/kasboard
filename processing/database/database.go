@@ -136,6 +136,10 @@ func (db *Database) InsertAnalyzedBlock(analyzedBlock *model.AnalyzedBlock) erro
 	return db.database.Insert(analyzedBlock)
 }
 
+func (db *Database) InsertHeaderAmount(headerAmount *model.HeaderAmount) error {
+	return db.database.Insert(headerAmount)
+}
+
 func (db *Database) Close() {
 	_ = db.database.Close()
 }

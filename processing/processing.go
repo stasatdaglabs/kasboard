@@ -1,12 +1,14 @@
 package main
 
 import (
+	"github.com/kaspanet/kaspad/infrastructure/network/rpcclient"
 	"github.com/stasatdaglabs/kashboard/processing/analysis"
 	databasePackage "github.com/stasatdaglabs/kashboard/processing/database"
 	configPackage "github.com/stasatdaglabs/kashboard/processing/infrastructure/config"
 	interruptPackage "github.com/stasatdaglabs/kashboard/processing/infrastructure/interrupt"
 	"github.com/stasatdaglabs/kashboard/processing/infrastructure/logging"
 	"github.com/stasatdaglabs/kashboard/processing/kaspad_sync"
+	"github.com/stasatdaglabs/kashboard/processing/polling"
 	"os"
 )
 
@@ -27,11 +29,18 @@ func main() {
 	}
 	defer database.Close()
 
-	blockChan, err := kaspad_sync.Start(config, database)
+	client, err := rpcclient.NewRPCClient(config.RPCServerAddress)
+	if err != nil {
+		logErrorAndExit("Could not connect to the Kaspad RPC server at %s: %s",
+			config.RPCServerAddress, err)
+	}
+
+	blockChan, err := kaspad_sync.Start(config, database, client)
 	if err != nil {
 		logErrorAndExit("Received error from Kaspad sync: %s", err)
 	}
 	analysis.Start(database, blockChan)
+	polling.Start(database, client)
 
 	<-interrupt
 }

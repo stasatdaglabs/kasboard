@@ -17,3 +17,8 @@ type AnalyzedBlock struct {
 	BlockRate           float64 `pg:",use_zero"`
 	TransactionRate     float64 `pg:",use_zero"`
 }
+
+type HeaderAmount struct {
+	Timestamp int64  `pg:",use_zero"`
+	Amount    uint64 `pg:",use_zero"`
+}

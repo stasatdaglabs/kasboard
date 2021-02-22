@@ -18,4 +18,10 @@ CREATE TABLE analyzed_blocks
     block_rate            NUMERIC NOT NULL,
     transaction_rate      NUMERIC NOT NULL,
     PRIMARY KEY (id)
-)
+);
+
+CREATE TABLE header_amounts
+(
+    timestamp BIGINT NOT NULL,
+    amount    BIGINT NOT NULL
+);

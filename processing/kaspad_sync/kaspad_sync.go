@@ -4,7 +4,6 @@ import (
 	"github.com/kaspanet/kaspad/app/appmessage"
 	"github.com/kaspanet/kaspad/infrastructure/network/rpcclient"
 	"github.com/kaspanet/kaspad/util/panics"
-	"github.com/pkg/errors"
 	"github.com/stasatdaglabs/kashboard/processing/database"
 	"github.com/stasatdaglabs/kashboard/processing/database/model"
 	"github.com/stasatdaglabs/kashboard/processing/infrastructure/config"
@@ -15,15 +14,9 @@ import (
 var log = logging.Logger()
 var spawn = panics.GoroutineWrapperFunc(log)
 
-func Start(config *config.Config, database *database.Database) (chan *model.Block, error) {
-	client, err := rpcclient.NewRPCClient(config.RPCServerAddress)
-	if err != nil {
-		return nil, errors.Errorf("Could not connect to the Kaspad RPC server at %s: %s",
-			config.RPCServerAddress, err)
-	}
-
+func Start(config *config.Config, database *database.Database, client *rpcclient.RPCClient) (chan *model.Block, error) {
 	blockAddedNotifications := make(chan *appmessage.BlockAddedNotificationMessage, config.ActiveNetParams.PruningDepth())
-	err = client.RegisterForBlockAddedNotifications(func(notification *appmessage.BlockAddedNotificationMessage) {
+	err := client.RegisterForBlockAddedNotifications(func(notification *appmessage.BlockAddedNotificationMessage) {
 		blockAddedNotifications <- notification
 	})
 	if err != nil {
