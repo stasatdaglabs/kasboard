@@ -1,7 +1,10 @@
-package kaspad_sync
+package hashrate
 
 import (
+	"github.com/kaspanet/kaspad/domain/dagconfig"
+	"github.com/kaspanet/kaspad/util/difficulty"
 	"math/big"
+	"strconv"
 	"time"
 )
 
@@ -29,4 +32,16 @@ func hashrate(target *big.Int, TargetTimePerBlock time.Duration) *big.Int {
 	divisor.Div(divisor, tmp.SetInt64(int64(time.Second/time.Millisecond))) // Scale it up to seconds.
 	divisor.Div(oneLsh256, divisor)
 	return divisor
+}
+
+// Hashrate converts the given bits string to hashrate in uint64
+func Hashrate(bits string) (uint64, error) {
+	bitsUint64, err := strconv.ParseUint(bits, 16, 32)
+	if err != nil {
+		return 0, err
+	}
+	bitsUint32 := uint32(bitsUint64)
+	bitsBigInt := difficulty.CompactToBig(bitsUint32)
+	hashrateBigInt := hashrate(bitsBigInt, dagconfig.TestnetParams.TargetTimePerBlock)
+	return hashrateBigInt.Uint64(), nil
 }

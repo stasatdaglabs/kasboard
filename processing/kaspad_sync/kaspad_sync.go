@@ -3,16 +3,18 @@ package kaspad_sync
 import (
 	"github.com/kaspanet/kaspad/app/appmessage"
 	"github.com/kaspanet/kaspad/infrastructure/network/rpcclient"
-	"github.com/kaspanet/kaspad/util/difficulty"
+	"github.com/kaspanet/kaspad/util/panics"
 	"github.com/pkg/errors"
 	"github.com/stasatdaglabs/kashboard/processing/database"
 	"github.com/stasatdaglabs/kashboard/processing/database/model"
 	"github.com/stasatdaglabs/kashboard/processing/infrastructure/logging"
-	"strconv"
-	"time"
+	hashratePackage "github.com/stasatdaglabs/kashboard/processing/kaspad_sync/hashrate"
 )
 
 var log = logging.Logger()
+var spawn = panics.GoroutineWrapperFunc(log)
+
+var blockAddedNotifications = make(chan *appmessage.BlockAddedNotificationMessage, 1_000_000)
 
 func Start(rpcServerAddress string, database *database.Database) error {
 	client, err := rpcclient.NewRPCClient(rpcServerAddress)
@@ -20,27 +22,32 @@ func Start(rpcServerAddress string, database *database.Database) error {
 		return errors.Errorf("Could not connect to the Kaspad RPC server at %s: %s", rpcServerAddress, err)
 	}
 
-	return client.RegisterForBlockAddedNotifications(func(notification *appmessage.BlockAddedNotificationMessage) {
-		handleBlockAddedNotifications(database, notification)
+	err = client.RegisterForBlockAddedNotifications(func(notification *appmessage.BlockAddedNotificationMessage) {
+		blockAddedNotifications <- notification
 	})
+	if err != nil {
+		return err
+	}
+
+	spawn("handleBlockAddedNotifications", func() {
+		for notification := range blockAddedNotifications {
+			handleBlockAddedNotifications(database, notification)
+		}
+	})
+	return nil
 }
 
 func handleBlockAddedNotifications(database *database.Database, notification *appmessage.BlockAddedNotificationMessage) {
-	bitsUint64, err := strconv.ParseUint(notification.BlockVerboseData.Bits, 16, 32)
+	hashrate, err := hashratePackage.Hashrate(notification.BlockVerboseData.Bits)
 	if err != nil {
-		panic(err)
+		return
 	}
-	bitsUint32 := uint32(bitsUint64)
-	bitsBigInt := difficulty.CompactToBig(bitsUint32)
-	hashrateBigInt := hashrate(bitsBigInt, 1*time.Second)
-	hashrateUint64 := hashrateBigInt.Uint64()
 
 	block := &model.Block{
 		BlockHash: notification.BlockVerboseData.Hash,
 		BlueScore: notification.BlockVerboseData.BlueScore,
 		Timestamp: notification.BlockVerboseData.Time,
-		Bits:      bitsUint32,
-		Hashrate:  hashrateUint64,
+		Hashrate:  hashrate,
 	}
 	err = database.InsertBlock(block)
 	if err != nil {
