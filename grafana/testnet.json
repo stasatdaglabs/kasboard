@@ -165,6 +165,74 @@
         "x": 2,
         "y": 2
       },
+      "id": 5,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "text": {},
+        "textMode": "auto"
+      },
+      "pluginVersion": "7.4.2",
+      "targets": [
+        {
+          "format": "table",
+          "group": [],
+          "hide": false,
+          "metricColumn": "none",
+          "rawQuery": true,
+          "rawSql": "SELECT\n  MAX(blue_score)\nFROM blocks",
+          "refId": "A",
+          "select": [
+            [
+              {
+                "params": [
+                  "blue_score"
+                ],
+                "type": "column"
+              }
+            ]
+          ],
+          "table": "blocks",
+          "timeColumn": "\"timestamp\"",
+          "timeColumnType": "int8",
+          "where": []
+        }
+      ],
+      "title": "Blue Score",
+      "type": "stat"
+    },
+    {
+      "datasource": null,
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {},
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": []
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 3,
+        "w": 2,
+        "x": 12,
+        "y": 2
+      },
       "id": 21,
       "options": {
         "colorMode": "value",
@@ -213,82 +281,16 @@
       "type": "stat"
     },
     {
-      "datasource": null,
-      "description": "",
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "thresholds"
-          },
-          "custom": {},
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": []
-          }
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 3,
-        "w": 2,
-        "x": 12,
-        "y": 2
-      },
-      "id": 5,
-      "options": {
-        "colorMode": "value",
-        "graphMode": "area",
-        "justifyMode": "auto",
-        "orientation": "auto",
-        "reduceOptions": {
-          "calcs": [
-            "lastNotNull"
-          ],
-          "fields": "",
-          "values": false
-        },
-        "text": {},
-        "textMode": "auto"
-      },
-      "pluginVersion": "7.4.2",
-      "targets": [
-        {
-          "format": "table",
-          "group": [],
-          "hide": false,
-          "metricColumn": "none",
-          "rawQuery": true,
-          "rawSql": "SELECT\n  MAX(blue_score)\nFROM blocks",
-          "refId": "A",
-          "select": [
-            [
-              {
-                "params": [
-                  "blue_score"
-                ],
-                "type": "column"
-              }
-            ]
-          ],
-          "table": "blocks",
-          "timeColumn": "\"timestamp\"",
-          "timeColumnType": "int8",
-          "where": []
-        }
-      ],
-      "title": "Blue Score",
-      "type": "stat"
-    },
-    {
       "aliasColors": {},
       "bars": false,
       "dashLength": 10,
       "dashes": false,
       "datasource": null,
+      "description": "",
       "fieldConfig": {
         "defaults": {
           "custom": {},
+          "displayName": "Hashes/Second (estimated via block Difficulty)",
           "unit": "Hs"
         },
         "overrides": []
@@ -401,7 +403,8 @@
       "datasource": null,
       "fieldConfig": {
         "defaults": {
-          "custom": {}
+          "custom": {},
+          "displayName": "Blocks/Second (average over 1 minute)"
         },
         "overrides": []
       },
@@ -512,7 +515,8 @@
       "datasource": null,
       "fieldConfig": {
         "defaults": {
-          "custom": {}
+          "custom": {},
+          "displayName": "Parents/Block (average over 1 minute)"
         },
         "overrides": []
       },
@@ -578,7 +582,7 @@
       "timeFrom": null,
       "timeRegions": [],
       "timeShift": null,
-      "title": "Average Parent Amount",
+      "title": "Parent Amount",
       "tooltip": {
         "shared": true,
         "sort": 0,
@@ -623,7 +627,8 @@
       "datasource": null,
       "fieldConfig": {
         "defaults": {
-          "custom": {}
+          "custom": {},
+          "displayName": "Transactionss/Second (average over 1 minute)"
         },
         "overrides": []
       },
