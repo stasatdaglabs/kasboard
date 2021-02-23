@@ -23,68 +23,54 @@
       "description": "",
       "fieldConfig": {
         "defaults": {
-          "color": {
-            "mode": "thresholds"
-          },
-          "custom": {},
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": []
-          }
+          "custom": {}
         },
         "overrides": []
       },
       "gridPos": {
-        "h": 3,
-        "w": 2,
-        "x": 10,
+        "h": 2,
+        "w": 24,
+        "x": 0,
         "y": 0
       },
-      "id": 5,
+      "id": 19,
       "options": {
-        "colorMode": "value",
-        "graphMode": "area",
-        "justifyMode": "auto",
-        "orientation": "auto",
-        "reduceOptions": {
-          "calcs": [
-            "lastNotNull"
-          ],
-          "fields": "",
-          "values": false
-        },
-        "text": {},
-        "textMode": "auto"
+        "content": "# Network Health\n         ",
+        "mode": "markdown"
       },
       "pluginVersion": "7.4.2",
       "targets": [
         {
-          "format": "table",
+          "format": "time_series",
           "group": [],
-          "hide": false,
           "metricColumn": "none",
-          "rawQuery": true,
-          "rawSql": "SELECT\n  MAX(blue_score)\nFROM blocks",
+          "rawQuery": false,
+          "rawSql": "SELECT\n  $__time(time_column),\n  value1\nFROM\n  metric_table\nWHERE\n  $__timeFilter(time_column)\n",
           "refId": "A",
           "select": [
             [
               {
                 "params": [
-                  "blue_score"
+                  "value"
                 ],
                 "type": "column"
               }
             ]
           ],
-          "table": "blocks",
-          "timeColumn": "\"timestamp\"",
-          "timeColumnType": "int8",
-          "where": []
+          "timeColumn": "time",
+          "where": [
+            {
+              "name": "$__timeFilter",
+              "params": [],
+              "type": "macro"
+            }
+          ]
         }
       ],
-      "title": "Blue Score",
-      "type": "stat"
+      "timeFrom": null,
+      "timeShift": null,
+      "title": "",
+      "type": "text"
     },
     {
       "datasource": null,
@@ -105,8 +91,8 @@
       "gridPos": {
         "h": 3,
         "w": 2,
-        "x": 12,
-        "y": 0
+        "x": 0,
+        "y": 2
       },
       "id": 13,
       "options": {
@@ -156,6 +142,74 @@
       "type": "stat"
     },
     {
+      "datasource": null,
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {},
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": []
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 3,
+        "w": 2,
+        "x": 12,
+        "y": 2
+      },
+      "id": 5,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "text": {},
+        "textMode": "auto"
+      },
+      "pluginVersion": "7.4.2",
+      "targets": [
+        {
+          "format": "table",
+          "group": [],
+          "hide": false,
+          "metricColumn": "none",
+          "rawQuery": true,
+          "rawSql": "SELECT\n  MAX(blue_score)\nFROM blocks",
+          "refId": "A",
+          "select": [
+            [
+              {
+                "params": [
+                  "blue_score"
+                ],
+                "type": "column"
+              }
+            ]
+          ],
+          "table": "blocks",
+          "timeColumn": "\"timestamp\"",
+          "timeColumnType": "int8",
+          "where": []
+        }
+      ],
+      "title": "Blue Score",
+      "type": "stat"
+    },
+    {
       "aliasColors": {},
       "bars": false,
       "dashLength": 10,
@@ -174,7 +228,7 @@
         "h": 8,
         "w": 12,
         "x": 0,
-        "y": 3
+        "y": 5
       },
       "hiddenSeries": false,
       "id": 3,
@@ -286,7 +340,7 @@
         "h": 8,
         "w": 12,
         "x": 12,
-        "y": 3
+        "y": 5
       },
       "hiddenSeries": false,
       "id": 9,
@@ -397,7 +451,7 @@
         "h": 8,
         "w": 12,
         "x": 0,
-        "y": 11
+        "y": 13
       },
       "hiddenSeries": false,
       "id": 7,
@@ -508,7 +562,7 @@
         "h": 8,
         "w": 12,
         "x": 12,
-        "y": 11
+        "y": 13
       },
       "hiddenSeries": false,
       "id": 11,
@@ -602,6 +656,60 @@
       }
     },
     {
+      "datasource": null,
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "custom": {}
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 2,
+        "w": 24,
+        "x": 0,
+        "y": 21
+      },
+      "id": 20,
+      "options": {
+        "content": "# Debug\n         ",
+        "mode": "markdown"
+      },
+      "pluginVersion": "7.4.2",
+      "targets": [
+        {
+          "format": "time_series",
+          "group": [],
+          "metricColumn": "none",
+          "rawQuery": false,
+          "rawSql": "SELECT\n  $__time(time_column),\n  value1\nFROM\n  metric_table\nWHERE\n  $__timeFilter(time_column)\n",
+          "refId": "A",
+          "select": [
+            [
+              {
+                "params": [
+                  "value"
+                ],
+                "type": "column"
+              }
+            ]
+          ],
+          "timeColumn": "time",
+          "where": [
+            {
+              "name": "$__timeFilter",
+              "params": [],
+              "type": "macro"
+            }
+          ]
+        }
+      ],
+      "timeFrom": null,
+      "timeShift": null,
+      "title": "",
+      "type": "text"
+    },
+    {
       "aliasColors": {},
       "bars": false,
       "dashLength": 10,
@@ -619,7 +727,7 @@
         "h": 8,
         "w": 12,
         "x": 0,
-        "y": 19
+        "y": 23
       },
       "hiddenSeries": false,
       "id": 15,
@@ -672,7 +780,9 @@
         }
       ],
       "thresholds": [],
+      "timeFrom": null,
       "timeRegions": [],
+      "timeShift": null,
       "title": "Tip Amount",
       "tooltip": {
         "shared": true,
@@ -728,7 +838,7 @@
         "h": 8,
         "w": 12,
         "x": 12,
-        "y": 19
+        "y": 23
       },
       "hiddenSeries": false,
       "id": 17,
@@ -781,7 +891,9 @@
         }
       ],
       "thresholds": [],
+      "timeFrom": null,
       "timeRegions": [],
+      "timeShift": null,
       "title": "Virtual Parent Amount",
       "tooltip": {
         "shared": true,
