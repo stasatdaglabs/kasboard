@@ -20,6 +20,7 @@ services:
       - "--connection-string=postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@localhost:5432/${POSTGRES_DB}?sslmode=disable"
     network_mode: host
     user: root
+    restart: always
 
   grafana:
     image: "kashboard-grafana:latest"
