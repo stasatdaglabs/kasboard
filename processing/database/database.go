@@ -140,6 +140,10 @@ func (db *Database) InsertHeaderAmount(headerAmount *model.HeaderAmount) error {
 	return db.database.Insert(headerAmount)
 }
 
+func (db *Database) InsertBlockAmount(blockAmount *model.BlockAmount) error {
+	return db.database.Insert(blockAmount)
+}
+
 func (db *Database) InsertTipAmount(tipAmount *model.TipAmount) error {
 	return db.database.Insert(tipAmount)
 }

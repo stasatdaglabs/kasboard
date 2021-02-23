@@ -26,6 +26,12 @@ CREATE TABLE header_amounts
     amount    BIGINT NOT NULL
 );
 
+CREATE TABLE block_amounts
+(
+    timestamp BIGINT NOT NULL,
+    amount    BIGINT NOT NULL
+);
+
 CREATE TABLE tip_amounts
 (
     timestamp BIGINT NOT NULL,

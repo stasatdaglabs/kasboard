@@ -26,14 +26,14 @@ func Start(database *database.Database, client *rpcclient.RPCClient) {
 }
 
 func poll(database *database.Database, client *rpcclient.RPCClient) error {
-	err := pollHeaderAmount(database, client)
+	err := pollHeaderAmountAndBlockAmount(database, client)
 	if err != nil {
 		return err
 	}
 	return pollTipAmountAndVirtualParentAmount(database, client)
 }
 
-func pollHeaderAmount(database *database.Database, client *rpcclient.RPCClient) error {
+func pollHeaderAmountAndBlockAmount(database *database.Database, client *rpcclient.RPCClient) error {
 	getBlockCountResponse, err := client.GetBlockCount()
 	if err != nil {
 		return err
@@ -43,7 +43,16 @@ func pollHeaderAmount(database *database.Database, client *rpcclient.RPCClient) 
 		Timestamp: mstime.Now().UnixMilliseconds(),
 		Amount:    getBlockCountResponse.HeaderCount,
 	}
-	return database.InsertHeaderAmount(headerAmount)
+	err = database.InsertHeaderAmount(headerAmount)
+	if err != nil {
+		return err
+	}
+
+	blockAmount := &model.BlockAmount{
+		Timestamp: mstime.Now().UnixMilliseconds(),
+		Amount:    getBlockCountResponse.BlockCount,
+	}
+	return database.InsertBlockAmount(blockAmount)
 }
 
 func pollTipAmountAndVirtualParentAmount(database *database.Database, client *rpcclient.RPCClient) error {

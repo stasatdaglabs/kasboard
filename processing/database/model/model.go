@@ -23,6 +23,11 @@ type HeaderAmount struct {
 	Amount    uint64 `pg:",use_zero"`
 }
 
+type BlockAmount struct {
+	Timestamp int64  `pg:",use_zero"`
+	Amount    uint64 `pg:",use_zero"`
+}
+
 type TipAmount struct {
 	Timestamp int64  `pg:",use_zero"`
 	Amount    uint32 `pg:",use_zero"`
