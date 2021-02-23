@@ -49,5 +49,11 @@ func handleBlock(database *database.Database, block *model.Block) error {
 		BlockRate:           blockRate,
 		TransactionRate:     transactionRate,
 	}
-	return database.InsertAnalyzedBlock(analyzedBlock)
+	err = database.InsertAnalyzedBlock(analyzedBlock)
+	if err != nil {
+		return err
+	}
+
+	log.Infof("Added analyzed block %s with timestamp %d", block.BlockHash, block.Timestamp)
+	return nil
 }

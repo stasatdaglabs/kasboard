@@ -55,7 +55,7 @@ func handleBlockAddedNotifications(config *config.Config, database *database.Dat
 	if err != nil {
 		return err
 	}
-	log.Infof("Added block %s with blue score %d", block.BlockHash, block.BlueScore)
+	log.Infof("Added block %s with timestamp %d", block.BlockHash, block.Timestamp)
 
 	blockChan <- block
 	return nil
