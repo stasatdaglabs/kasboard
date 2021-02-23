@@ -26,7 +26,11 @@ func Start(database *database.Database, client *rpcclient.RPCClient) {
 }
 
 func poll(database *database.Database, client *rpcclient.RPCClient) error {
-	return pollHeaderAmount(database, client)
+	err := pollHeaderAmount(database, client)
+	if err != nil {
+		return err
+	}
+	return pollTipAmountAndVirtualParentAmount(database, client)
 }
 
 func pollHeaderAmount(database *database.Database, client *rpcclient.RPCClient) error {
@@ -40,4 +44,27 @@ func pollHeaderAmount(database *database.Database, client *rpcclient.RPCClient) 
 		Amount:    getBlockCountResponse.HeaderCount,
 	}
 	return database.InsertHeaderAmount(headerAmount)
+}
+
+func pollTipAmountAndVirtualParentAmount(database *database.Database, client *rpcclient.RPCClient) error {
+	getBlockDAGInfoResponse, err := client.GetBlockDAGInfo()
+	if err != nil {
+		return err
+	}
+	timestamp := mstime.Now().UnixMilliseconds()
+
+	tipAmount := &model.TipAmount{
+		Timestamp: timestamp,
+		Amount:    uint32(len(getBlockDAGInfoResponse.TipHashes)),
+	}
+	err = database.InsertTipAmount(tipAmount)
+	if err != nil {
+		return err
+	}
+
+	virtualParentAmount := &model.VirtualParentAmount{
+		Timestamp: timestamp,
+		Amount:    uint16(len(getBlockDAGInfoResponse.VirtualParentHashes)),
+	}
+	return database.InsertVirtualParentAmount(virtualParentAmount)
 }

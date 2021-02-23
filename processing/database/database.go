@@ -140,6 +140,14 @@ func (db *Database) InsertHeaderAmount(headerAmount *model.HeaderAmount) error {
 	return db.database.Insert(headerAmount)
 }
 
+func (db *Database) InsertTipAmount(tipAmount *model.TipAmount) error {
+	return db.database.Insert(tipAmount)
+}
+
+func (db *Database) InsertVirtualParentAmount(virtualParentAmount *model.VirtualParentAmount) error {
+	return db.database.Insert(virtualParentAmount)
+}
+
 func (db *Database) Close() {
 	_ = db.database.Close()
 }

@@ -25,3 +25,15 @@ CREATE TABLE header_amounts
     timestamp BIGINT NOT NULL,
     amount    BIGINT NOT NULL
 );
+
+CREATE TABLE tip_amounts
+(
+    timestamp BIGINT NOT NULL,
+    amount    INT NOT NULL
+);
+
+CREATE TABLE virtual_parent_amounts
+(
+    timestamp BIGINT NOT NULL,
+    amount    SMALLINT NOT NULL
+);
