@@ -1,4 +1,4 @@
-module github.com/stasatdaglabs/kashboard/processing
+module github.com/stasatdaglabs/kasboard/processing
 
 go 1.15
 

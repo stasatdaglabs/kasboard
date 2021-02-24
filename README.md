@@ -1,2 +1,2 @@
-kashboard
+kasboard
 =========

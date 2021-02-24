@@ -4,11 +4,11 @@ import (
 	"github.com/kaspanet/kaspad/app/appmessage"
 	"github.com/kaspanet/kaspad/infrastructure/network/rpcclient"
 	"github.com/kaspanet/kaspad/util/panics"
-	"github.com/stasatdaglabs/kashboard/processing/database"
-	"github.com/stasatdaglabs/kashboard/processing/database/model"
-	"github.com/stasatdaglabs/kashboard/processing/infrastructure/config"
-	"github.com/stasatdaglabs/kashboard/processing/infrastructure/logging"
-	hashratePackage "github.com/stasatdaglabs/kashboard/processing/kaspad_sync/hashrate"
+	"github.com/stasatdaglabs/kasboard/processing/database"
+	"github.com/stasatdaglabs/kasboard/processing/database/model"
+	"github.com/stasatdaglabs/kasboard/processing/infrastructure/config"
+	"github.com/stasatdaglabs/kasboard/processing/infrastructure/logging"
+	hashratePackage "github.com/stasatdaglabs/kasboard/processing/kaspad_sync/hashrate"
 )
 
 var log = logging.Logger()

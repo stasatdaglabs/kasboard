@@ -5,8 +5,8 @@ import (
 	"github.com/go-pg/pg/v9"
 	"github.com/kaspanet/kaspad/util/mstime"
 	"github.com/pkg/errors"
-	"github.com/stasatdaglabs/kashboard/processing/database/model"
-	"github.com/stasatdaglabs/kashboard/processing/infrastructure/logging"
+	"github.com/stasatdaglabs/kasboard/processing/database/model"
+	"github.com/stasatdaglabs/kasboard/processing/infrastructure/logging"
 	"strings"
 	"time"
 )

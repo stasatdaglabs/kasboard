@@ -10,7 +10,7 @@ services:
     network_mode: host
 
   processing:
-    image: "kashboard-processing:latest"
+    image: "kasboard-processing:latest"
     depends_on:
       - postgres
     command:
@@ -23,7 +23,7 @@ services:
     restart: always
 
   grafana:
-    image: "kashboard-grafana:latest"
+    image: "kasboard-grafana:latest"
     depends_on:
       - postgres
     environment:

@@ -29,8 +29,8 @@ if [ true = "${REQUIRED_VARIABLE_NOT_SET}" ]; then
 fi
 
 # Build the grafana and processing images
-docker build -f processing/Dockerfile -t kashboard-processing:latest .
-docker build -f grafana/Dockerfile -t kashboard-grafana:latest .
+docker build -f processing/Dockerfile -t kasboard-processing:latest .
+docker build -f grafana/Dockerfile -t kasboard-grafana:latest .
 
 # Start postgres
 docker-compose up -d postgres

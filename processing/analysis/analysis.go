@@ -2,9 +2,9 @@ package analysis
 
 import (
 	"github.com/kaspanet/kaspad/util/panics"
-	"github.com/stasatdaglabs/kashboard/processing/database"
-	"github.com/stasatdaglabs/kashboard/processing/database/model"
-	"github.com/stasatdaglabs/kashboard/processing/infrastructure/logging"
+	"github.com/stasatdaglabs/kasboard/processing/database"
+	"github.com/stasatdaglabs/kasboard/processing/database/model"
+	"github.com/stasatdaglabs/kasboard/processing/infrastructure/logging"
 	"time"
 )
 

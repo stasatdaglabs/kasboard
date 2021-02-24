@@ -9,9 +9,9 @@ import (
 )
 
 const (
-	appDataDirectory = "kashboard"
-	logFileName      = "kashboard.log"
-	errorLogFileName = "kashboard_errors.log"
+	appDataDirectory = "kasboard"
+	logFileName      = "kasboard.log"
+	errorLogFileName = "kasboard_errors.log"
 )
 
 var (

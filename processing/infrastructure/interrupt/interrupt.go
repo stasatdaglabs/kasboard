@@ -1,7 +1,7 @@
 package interrupt
 
 import (
-	"github.com/stasatdaglabs/kashboard/processing/infrastructure/logging"
+	"github.com/stasatdaglabs/kasboard/processing/infrastructure/logging"
 	"os"
 	"os/signal"
 )

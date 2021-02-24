@@ -2,13 +2,13 @@ package main
 
 import (
 	"github.com/kaspanet/kaspad/infrastructure/network/rpcclient"
-	"github.com/stasatdaglabs/kashboard/processing/analysis"
-	databasePackage "github.com/stasatdaglabs/kashboard/processing/database"
-	configPackage "github.com/stasatdaglabs/kashboard/processing/infrastructure/config"
-	interruptPackage "github.com/stasatdaglabs/kashboard/processing/infrastructure/interrupt"
-	"github.com/stasatdaglabs/kashboard/processing/infrastructure/logging"
-	"github.com/stasatdaglabs/kashboard/processing/kaspad_sync"
-	"github.com/stasatdaglabs/kashboard/processing/polling"
+	"github.com/stasatdaglabs/kasboard/processing/analysis"
+	databasePackage "github.com/stasatdaglabs/kasboard/processing/database"
+	configPackage "github.com/stasatdaglabs/kasboard/processing/infrastructure/config"
+	interruptPackage "github.com/stasatdaglabs/kasboard/processing/infrastructure/interrupt"
+	"github.com/stasatdaglabs/kasboard/processing/infrastructure/logging"
+	"github.com/stasatdaglabs/kasboard/processing/kaspad_sync"
+	"github.com/stasatdaglabs/kasboard/processing/polling"
 	"os"
 )
 
