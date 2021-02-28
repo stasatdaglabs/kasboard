@@ -335,8 +335,8 @@
           "group": [],
           "metricColumn": "none",
           "queryType": "randomWalk",
-          "rawQuery": false,
-          "rawSql": "SELECT\n  \"timestamp\" AS \"time\",\n  hashrate\nFROM blocks\nORDER BY 1",
+          "rawQuery": true,
+          "rawSql": "SELECT\n  \"timestamp\" AS \"time\",\n  hashrate\nFROM blocks\nWHERE $__unixEpochFilter(\"timestamp\" / 1000)\nORDER BY 1",
           "refId": "A",
           "select": [
             [
@@ -447,8 +447,8 @@
           "format": "time_series",
           "group": [],
           "metricColumn": "none",
-          "rawQuery": false,
-          "rawSql": "SELECT\n  \"timestamp\" AS \"time\",\n  block_rate\nFROM analyzed_blocks\nORDER BY 1",
+          "rawQuery": true,
+          "rawSql": "SELECT\n  \"timestamp\" AS \"time\",\n  block_rate\nFROM analyzed_blocks\nWHERE $__unixEpochFilter(\"timestamp\" / 1000)\nORDER BY 1",
           "refId": "A",
           "select": [
             [
@@ -559,8 +559,8 @@
           "format": "time_series",
           "group": [],
           "metricColumn": "none",
-          "rawQuery": false,
-          "rawSql": "SELECT\n  \"timestamp\" AS \"time\",\n  average_parent_amount\nFROM analyzed_blocks\nORDER BY 1",
+          "rawQuery": true,
+          "rawSql": "SELECT\n  \"timestamp\" AS \"time\",\n  average_parent_amount\nFROM analyzed_blocks\nWHERE $__unixEpochFilter(\"timestamp\" / 1000)\nORDER BY 1",
           "refId": "A",
           "select": [
             [
@@ -671,8 +671,8 @@
           "format": "time_series",
           "group": [],
           "metricColumn": "none",
-          "rawQuery": false,
-          "rawSql": "SELECT\n  \"timestamp\" AS \"time\",\n  transaction_rate\nFROM analyzed_blocks\nORDER BY 1",
+          "rawQuery": true,
+          "rawSql": "SELECT\n  \"timestamp\" AS \"time\",\n  transaction_rate\nFROM analyzed_blocks\nWHERE $__unixEpochFilter(\"timestamp\" / 1000)\nORDER BY 1",
           "refId": "A",
           "select": [
             [
@@ -836,8 +836,8 @@
           "format": "time_series",
           "group": [],
           "metricColumn": "none",
-          "rawQuery": false,
-          "rawSql": "SELECT\n  \"timestamp\" AS \"time\",\n  amount\nFROM tip_amounts\nORDER BY 1",
+          "rawQuery": true,
+          "rawSql": "SELECT\n  \"timestamp\" AS \"time\",\n  amount\nFROM tip_amounts\nWHERE $__unixEpochFilter(\"timestamp\" / 1000)\nORDER BY 1",
           "refId": "A",
           "select": [
             [
@@ -947,8 +947,8 @@
           "format": "time_series",
           "group": [],
           "metricColumn": "none",
-          "rawQuery": false,
-          "rawSql": "SELECT\n  \"timestamp\" AS \"time\",\n  amount\nFROM virtual_parent_amounts\nORDER BY 1",
+          "rawQuery": true,
+          "rawSql": "SELECT\n  \"timestamp\" AS \"time\",\n  amount\nFROM virtual_parent_amounts\nWHERE $__unixEpochFilter(\"timestamp\" / 1000)\nORDER BY 1",
           "refId": "A",
           "select": [
             [
