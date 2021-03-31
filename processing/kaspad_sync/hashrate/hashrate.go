@@ -1,10 +1,10 @@
 package hashrate
 
 import (
-	"github.com/kaspanet/kaspad/util/difficulty"
 	"math/big"
-	"strconv"
 	"time"
+
+	"github.com/kaspanet/kaspad/util/difficulty"
 )
 
 var (
@@ -34,13 +34,8 @@ func hashrate(target *big.Int, targetTimePerBlock time.Duration) *big.Int {
 }
 
 // Hashrate converts the given bits string to hashrate in uint64
-func Hashrate(bits string, targetTimePerBlock time.Duration) (uint64, error) {
-	bitsUint64, err := strconv.ParseUint(bits, 16, 32)
-	if err != nil {
-		return 0, err
-	}
-	bitsUint32 := uint32(bitsUint64)
-	bitsBigInt := difficulty.CompactToBig(bitsUint32)
+func Hashrate(bits uint32, targetTimePerBlock time.Duration) (uint64, error) {
+	bitsBigInt := difficulty.CompactToBig(bits)
 	hashrateBigInt := hashrate(bitsBigInt, targetTimePerBlock)
 	return hashrateBigInt.Uint64(), nil
 }
