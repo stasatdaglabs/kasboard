@@ -2,10 +2,11 @@ package logging
 
 import (
 	"fmt"
-	"github.com/kaspanet/kaspad/infrastructure/logger"
-	"github.com/kaspanet/kaspad/util"
 	"os"
 	"path/filepath"
+
+	"github.com/kaspanet/kaspad/infrastructure/logger"
+	"github.com/kaspanet/kaspad/util"
 )
 
 const (
@@ -20,7 +21,7 @@ var (
 )
 
 func init() {
-	homeDir := util.AppDataDir(appDataDirectory, false)
+	homeDir := util.AppDir(appDataDirectory, false)
 	logFile := filepath.Join(homeDir, logFileName)
 	errorLogFile := filepath.Join(homeDir, errorLogFileName)
 

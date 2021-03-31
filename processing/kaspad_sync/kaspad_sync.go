@@ -38,17 +38,17 @@ func Start(config *config.Config, database *database.Database, client *rpcclient
 func handleBlockAddedNotifications(config *config.Config, database *database.Database,
 	notification *appmessage.BlockAddedNotificationMessage, blockChan chan *model.Block) error {
 
-	hashrate, err := hashratePackage.Hashrate(notification.BlockVerboseData.Bits, config.ActiveNetParams.TargetTimePerBlock)
+	hashrate, err := hashratePackage.Hashrate(notification.Block.Header.Bits, config.ActiveNetParams.TargetTimePerBlock)
 	if err != nil {
 		return err
 	}
 
 	block := &model.Block{
-		BlockHash:         notification.BlockVerboseData.Hash,
-		BlueScore:         notification.BlockVerboseData.BlueScore,
-		Timestamp:         notification.BlockVerboseData.Time,
+		BlockHash:         notification.Block.VerboseData.Hash,
+		BlueScore:         notification.Block.VerboseData.BlueScore,
+		Timestamp:         notification.Block.Header.Timestamp,
 		Hashrate:          hashrate,
-		ParentAmount:      uint16(len(notification.BlockVerboseData.ParentHashes)),
+		ParentAmount:      uint16(len(notification.Block.Header.ParentHashes)),
 		TransactionAmount: uint16(len(notification.Block.Transactions)),
 	}
 	err = database.InsertBlock(block)
