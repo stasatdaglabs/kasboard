@@ -10,11 +10,11 @@ WORKDIR /build
 COPY processing/go.mod .
 COPY processing/go.sum .
 
-ARG KASPAD_VERSION
-RUN if [ -n "${KASPAD_VERSION}" ]; then \
-        # use replace instead of require - to propagate into nested dependancies
-        go mod edit -replace github.com/kaspanet/kaspad=github.com/kaspanet/kaspad@$KASPAD_VERSION ;\
-    fi
+ARG KASPAD_COMMIT_HASH
+RUN if [ -z "${KASPAD_COMMIT_HASH}" ]; then exit 1; fi
+
+# use replace instead of require - to propagate into nested dependancies
+RUN go mod edit -replace github.com/kaspanet/kaspad=github.com/kaspanet/kaspad@$KASPAD_COMMIT_HASH
 
 RUN go mod download
 
