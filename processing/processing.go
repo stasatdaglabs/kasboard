@@ -18,6 +18,8 @@ func main() {
 	interrupt := interruptPackage.InterruptListener()
 	defer log.Info("Shutdown complete")
 
+	logging.InitLog()
+
 	config, err := configPackage.Parse()
 	if err != nil {
 		logErrorAndExit("Could not parse command line arguments.\n%s", err)
@@ -47,5 +49,6 @@ func main() {
 
 func logErrorAndExit(errorLog string, logParameters ...interface{}) {
 	log.Errorf(errorLog, logParameters...)
+	logging.Close()
 	os.Exit(1)
 }

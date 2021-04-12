@@ -1,44 +1,27 @@
 package logging
 
 import (
-	"fmt"
-	"os"
-	"path/filepath"
-
 	"github.com/kaspanet/kaspad/infrastructure/logger"
 	"github.com/kaspanet/kaspad/util"
-)
-
-const (
-	appDataDirectory = "kasboard"
-	logFileName      = "kasboard.log"
-	errorLogFileName = "kasboard_errors.log"
+	"path/filepath"
 )
 
 var (
-	backendLog = logger.NewBackend()
-	log        = backendLog.Logger("KSBD")
+	homeDir      = util.AppDir("kasboard", false)
+	logFile      = filepath.Join(homeDir, "kasboard.log")
+	errorLogFile = filepath.Join(homeDir, "kasboard_errors.log")
+	log          = logger.RegisterSubSystem("KSBD")
 )
 
-func init() {
-	homeDir := util.AppDir(appDataDirectory, false)
-	logFile := filepath.Join(homeDir, logFileName)
-	errorLogFile := filepath.Join(homeDir, errorLogFileName)
-
-	err := backendLog.AddLogFile(logFile, logger.LevelTrace)
-	if err != nil {
-		_, _ = fmt.Fprintf(os.Stderr, "Error adding log file %s as log rotator for level %s: %s",
-			logFileName, logger.LevelTrace, err)
-		os.Exit(1)
-	}
-	err = backendLog.AddLogFile(errorLogFile, logger.LevelWarn)
-	if err != nil {
-		_, _ = fmt.Fprintf(os.Stderr, "Error adding log file %s as log rotator for level %s: %s",
-			errorLogFileName, logger.LevelWarn, err)
-		os.Exit(1)
-	}
+func InitLog() {
+	logger.InitLog(logFile, errorLogFile)
+	logger.SetLogLevels(logger.LevelInfo)
 }
 
 func Logger() *logger.Logger {
 	return log
+}
+
+func Close() {
+	log.Backend().Close()
 }
