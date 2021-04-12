@@ -30,7 +30,11 @@ func poll(database *database.Database, client *rpcclient.RPCClient) error {
 	if err != nil {
 		return err
 	}
-	return pollTipAmountAndVirtualParentAmount(database, client)
+	err = pollTipAmountAndVirtualParentAmount(database, client)
+	if err != nil {
+		return err
+	}
+	return pollMempoolSize(database, client)
 }
 
 func pollHeaderAmountAndBlockAmount(database *database.Database, client *rpcclient.RPCClient) error {
@@ -76,4 +80,17 @@ func pollTipAmountAndVirtualParentAmount(database *database.Database, client *rp
 		Amount:    uint16(len(getBlockDAGInfoResponse.VirtualParentHashes)),
 	}
 	return database.InsertVirtualParentAmount(virtualParentAmount)
+}
+
+func pollMempoolSize(database *database.Database, client *rpcclient.RPCClient) error {
+	getInfoResponse, err := client.GetInfo()
+	if err != nil {
+		return err
+	}
+	timestamp := mstime.Now().UnixMilliseconds()
+	mempoolSize := &model.MempoolSize{
+		Timestamp: timestamp,
+		Size:      getInfoResponse.MempoolSize,
+	}
+	return database.InsertMempoolSize(mempoolSize)
 }

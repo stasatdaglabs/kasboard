@@ -37,3 +37,8 @@ type VirtualParentAmount struct {
 	Timestamp int64  `pg:",use_zero"`
 	Amount    uint16 `pg:",use_zero"`
 }
+
+type MempoolSize struct {
+	Timestamp int64  `pg:",use_zero"`
+	Size      uint64 `pg:",use_zero"`
+}

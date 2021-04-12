@@ -152,6 +152,10 @@ func (db *Database) InsertVirtualParentAmount(virtualParentAmount *model.Virtual
 	return db.database.Insert(virtualParentAmount)
 }
 
+func (db *Database) InsertMempoolSize(mempoolSize *model.MempoolSize) error {
+	return db.database.Insert(mempoolSize)
+}
+
 func (db *Database) Close() {
 	_ = db.database.Close()
 }
