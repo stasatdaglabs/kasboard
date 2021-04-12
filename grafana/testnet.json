@@ -628,7 +628,7 @@
       "fieldConfig": {
         "defaults": {
           "custom": {},
-          "displayName": "Transactionss/Second (average over 1 minute)"
+          "displayName": "Transactions/Second (average over 1 minute, coinbase transactions excluded)"
         },
         "overrides": []
       },
