@@ -117,19 +117,20 @@ func (db *Database) BlockCount(fromBlock *model.Block, duration time.Duration) (
 	return result.Count, nil
 }
 
-func (db *Database) TransactionCount(fromBlock *model.Block, duration time.Duration) (uint64, error) {
+func (db *Database) TransactionCountWithoutCoinbase(fromBlock *model.Block, duration time.Duration) (uint64, error) {
 	endTimestamp := mstime.UnixMilliseconds(fromBlock.Timestamp)
 	startTimestamp := endTimestamp.Add(-duration)
 
 	var result struct {
-		Count uint64
+		TransactionAmount uint64
+		BlockAmount       uint64
 	}
-	_, err := db.database.QueryOne(&result, "SELECT SUM(transaction_amount) as count FROM blocks WHERE timestamp > ? AND timestamp < ?",
+	_, err := db.database.QueryOne(&result, "SELECT SUM(transaction_amount) as transaction_amount, COUNT(transaction_amount) as block_amount FROM blocks WHERE timestamp > ? AND timestamp < ?",
 		startTimestamp.UnixMilliseconds(), endTimestamp.UnixMilliseconds())
 	if err != nil {
 		return 0, err
 	}
-	return result.Count, nil
+	return result.TransactionAmount - result.BlockAmount, nil
 }
 
 func (db *Database) InsertAnalyzedBlock(analyzedBlock *model.AnalyzedBlock) error {

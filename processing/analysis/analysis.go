@@ -36,7 +36,7 @@ func handleBlock(database *database.Database, block *model.Block) error {
 	}
 	blockRate := float64(blockCount) / durationForAnalysis.Seconds()
 
-	transactionCount, err := database.TransactionCount(block, durationForAnalysis)
+	transactionCount, err := database.TransactionCountWithoutCoinbase(block, durationForAnalysis)
 	if err != nil {
 		return err
 	}

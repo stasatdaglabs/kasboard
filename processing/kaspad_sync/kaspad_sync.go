@@ -42,7 +42,6 @@ func handleBlockAddedNotifications(config *config.Config, database *database.Dat
 	if err != nil {
 		return err
 	}
-
 	block := &model.Block{
 		BlockHash:         notification.Block.VerboseData.Hash,
 		BlueScore:         notification.Block.VerboseData.BlueScore,
