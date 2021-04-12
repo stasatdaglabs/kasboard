@@ -1085,7 +1085,7 @@
       "timeFrom": null,
       "timeRegions": [],
       "timeShift": null,
-      "title": "Mempool Size",
+      "title": "Mempool Size (Transaction Amount)",
       "tooltip": {
         "shared": true,
         "sort": 0,
