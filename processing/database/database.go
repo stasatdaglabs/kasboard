@@ -173,6 +173,10 @@ func (db *Database) InsertPruningPointMovement(pruningPointMovement *model.Pruni
 	return db.database.Insert(pruningPointMovement)
 }
 
+func (db *Database) InsertTransactionInvCount(transactionInvCount *model.TransactionInvCount) error {
+	return db.database.Insert(transactionInvCount)
+}
+
 func (db *Database) Close() {
 	_ = db.database.Close()
 }

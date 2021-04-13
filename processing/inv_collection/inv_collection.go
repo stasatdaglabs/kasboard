@@ -6,8 +6,10 @@ import (
 	kaspadConfigPackage "github.com/kaspanet/kaspad/infrastructure/config"
 	"github.com/kaspanet/kaspad/infrastructure/network/netadapter/standalone"
 	"github.com/kaspanet/kaspad/infrastructure/network/rpcclient"
+	"github.com/kaspanet/kaspad/util/mstime"
 	"github.com/kaspanet/kaspad/util/panics"
 	"github.com/stasatdaglabs/kasboard/processing/database"
+	"github.com/stasatdaglabs/kasboard/processing/database/model"
 	"github.com/stasatdaglabs/kasboard/processing/infrastructure/config"
 	"github.com/stasatdaglabs/kasboard/processing/infrastructure/logging"
 	"net"
@@ -34,12 +36,14 @@ func poll(config *config.Config, database *database.Database, client *rpcclient.
 	if err != nil {
 		return err
 	}
-	log.Infof("invCount: %d", invCount)
-
-	return nil
+	transactionInvCount := &model.TransactionInvCount{
+		Timestamp: mstime.Now().UnixMilliseconds(),
+		Count:     invCount,
+	}
+	return database.InsertTransactionInvCount(transactionInvCount)
 }
 
-func collectInvs(config *config.Config, client *rpcclient.RPCClient) (uint64, error) {
+func collectInvs(config *config.Config, client *rpcclient.RPCClient) (uint32, error) {
 	minimalNetAdapter, err := buildMinimalNetAdapter(config)
 	if err != nil {
 		return 0, err
@@ -64,7 +68,7 @@ func collectInvs(config *config.Config, client *rpcclient.RPCClient) (uint64, er
 	}
 
 	isRunning := true
-	invCount := uint64(0)
+	invCount := uint32(0)
 	for peer, routes := range peersToRoutes {
 		routesCopy := routes
 		spawn(fmt.Sprintf("collectInvs-%s", peer), func() {
