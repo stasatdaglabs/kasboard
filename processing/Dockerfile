@@ -10,9 +10,19 @@ WORKDIR /build
 COPY processing/go.mod .
 COPY processing/go.sum .
 
+ARG KASPAD_VERSION
 ARG KASPAD_COMMIT_HASH
+
+# Exit if neither KASPAD_VERSION or KASPAD_COMMIT_HASH are set
+RUN if [ -z "${KASPAD_VERSION}" ] && [ -z "${KASPAD_COMMIT_HASH}" ]; then exit 1; fi
+
+# Replace the kaspad version by version tag
+RUN if [ -n "${KASPAD_VERSION}" ]; then \
+        go mod edit -replace github.com/kaspanet/kaspad=github.com/kaspanet/kaspad@$KASPAD_VERSION ;\
+    fi
+
+# Replace the kaspad version by commit hash
 RUN if [ -n "${KASPAD_COMMIT_HASH}" ]; then \
-        # use replace instead of require - to propagate into nested dependancies
         go mod edit -replace github.com/kaspanet/kaspad=github.com/kaspanet/kaspad@$KASPAD_COMMIT_HASH ;\
     fi
 
