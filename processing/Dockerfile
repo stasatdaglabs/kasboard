@@ -11,10 +11,10 @@ COPY processing/go.mod .
 COPY processing/go.sum .
 
 ARG KASPAD_COMMIT_HASH
-RUN if [ -z "${KASPAD_COMMIT_HASH}" ]; then exit 1; fi
-
-# use replace instead of require - to propagate into nested dependancies
-RUN go mod edit -replace github.com/kaspanet/kaspad=github.com/kaspanet/kaspad@$KASPAD_COMMIT_HASH
+RUN if [ -n "${KASPAD_COMMIT_HASH}" ]; then \
+        # use replace instead of require - to propagate into nested dependancies
+        go mod edit -replace github.com/kaspanet/kaspad=github.com/kaspanet/kaspad@$KASPAD_COMMIT_HASH ;\
+    fi
 
 RUN go mod download
 
