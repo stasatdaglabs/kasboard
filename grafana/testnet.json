@@ -281,6 +281,76 @@
       "type": "stat"
     },
     {
+      "datasource": null,
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {},
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": []
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 3,
+        "w": 4,
+        "x": 20,
+        "y": 2
+      },
+      "id": 24,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "/^time$/",
+          "values": false
+        },
+        "text": {
+          "valueSize": 24
+        },
+        "textMode": "auto"
+      },
+      "pluginVersion": "7.4.2",
+      "targets": [
+        {
+          "format": "table",
+          "group": [],
+          "hide": false,
+          "metricColumn": "none",
+          "rawQuery": true,
+          "rawSql": "SELECT to_timestamp(\"timestamp\" / 1000) AS \"time\" FROM pruning_point_movements ORDER BY \"timestamp\" DESC LIMIT 1",
+          "refId": "A",
+          "select": [
+            [
+              {
+                "params": [
+                  "blue_score"
+                ],
+                "type": "column"
+              }
+            ]
+          ],
+          "table": "blocks",
+          "timeColumn": "\"timestamp\"",
+          "timeColumnType": "int8",
+          "where": []
+        }
+      ],
+      "title": "Most Recent Pruning Point Movement",
+      "type": "stat"
+    },
+    {
       "aliasColors": {},
       "bars": false,
       "dashLength": 10,
