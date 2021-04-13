@@ -42,3 +42,8 @@ type MempoolSize struct {
 	Timestamp int64  `pg:",use_zero"`
 	Size      uint64 `pg:",use_zero"`
 }
+
+type PruningPointMovement struct {
+	Timestamp             int64  `pg:",use_zero"`
+	PruningPointBlockHash string `pg:",use_zero"`
+}

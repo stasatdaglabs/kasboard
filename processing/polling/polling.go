@@ -30,7 +30,7 @@ func poll(database *database.Database, client *rpcclient.RPCClient) error {
 	if err != nil {
 		return err
 	}
-	err = pollTipAmountAndVirtualParentAmount(database, client)
+	err = pollTipAmountAndVirtualParentAmountAndPruningPointMovement(database, client)
 	if err != nil {
 		return err
 	}
@@ -59,7 +59,7 @@ func pollHeaderAmountAndBlockAmount(database *database.Database, client *rpcclie
 	return database.InsertBlockAmount(blockAmount)
 }
 
-func pollTipAmountAndVirtualParentAmount(database *database.Database, client *rpcclient.RPCClient) error {
+func pollTipAmountAndVirtualParentAmountAndPruningPointMovement(database *database.Database, client *rpcclient.RPCClient) error {
 	getBlockDAGInfoResponse, err := client.GetBlockDAGInfo()
 	if err != nil {
 		return err
@@ -79,7 +79,28 @@ func pollTipAmountAndVirtualParentAmount(database *database.Database, client *rp
 		Timestamp: timestamp,
 		Amount:    uint16(len(getBlockDAGInfoResponse.VirtualParentHashes)),
 	}
-	return database.InsertVirtualParentAmount(virtualParentAmount)
+	err = database.InsertVirtualParentAmount(virtualParentAmount)
+	if err != nil {
+		return err
+	}
+
+	mostRecentPruningPointMovement, err := database.MostRecentPruningPointMovement()
+	if err != nil {
+		return err
+	}
+	if mostRecentPruningPointMovement == nil ||
+		mostRecentPruningPointMovement.PruningPointBlockHash != getBlockDAGInfoResponse.PruningPointHash {
+		pruningPointMovement := &model.PruningPointMovement{
+			Timestamp:             timestamp,
+			PruningPointBlockHash: getBlockDAGInfoResponse.PruningPointHash,
+		}
+		err := database.InsertPruningPointMovement(pruningPointMovement)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
 }
 
 func pollMempoolSize(database *database.Database, client *rpcclient.RPCClient) error {

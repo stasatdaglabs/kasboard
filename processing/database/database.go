@@ -157,6 +157,22 @@ func (db *Database) InsertMempoolSize(mempoolSize *model.MempoolSize) error {
 	return db.database.Insert(mempoolSize)
 }
 
+func (db *Database) MostRecentPruningPointMovement() (*model.PruningPointMovement, error) {
+	var pruningPointMovements []*model.PruningPointMovement
+	_, err := db.database.Query(&pruningPointMovements, "SELECT * FROM pruning_point_movements ORDER BY timestamp DESC LIMIT 1")
+	if err != nil {
+		return nil, err
+	}
+	if len(pruningPointMovements) == 0 {
+		return nil, nil
+	}
+	return pruningPointMovements[0], nil
+}
+
+func (db *Database) InsertPruningPointMovement(pruningPointMovement *model.PruningPointMovement) error {
+	return db.database.Insert(pruningPointMovement)
+}
+
 func (db *Database) Close() {
 	_ = db.database.Close()
 }
