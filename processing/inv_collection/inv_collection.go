@@ -10,6 +10,7 @@ import (
 	"github.com/stasatdaglabs/kasboard/processing/database"
 	"github.com/stasatdaglabs/kasboard/processing/infrastructure/config"
 	"github.com/stasatdaglabs/kasboard/processing/infrastructure/logging"
+	"net"
 	"time"
 )
 
@@ -50,9 +51,14 @@ func collectInvs(config *config.Config, client *rpcclient.RPCClient) (uint64, er
 
 	peersToRoutes := make(map[string]*standalone.Routes)
 	for _, peerInfo := range connectedPeerInfo.Infos {
-		routes, err := minimalNetAdapter.Connect(peerInfo.Address)
+		host, _, err := net.SplitHostPort(peerInfo.Address)
 		if err != nil {
 			return 0, err
+		}
+		connectAddress := net.JoinHostPort(host, config.NetParams().DefaultPort)
+		routes, err := minimalNetAdapter.Connect(connectAddress)
+		if err != nil {
+			continue
 		}
 		peersToRoutes[peerInfo.Address] = routes
 	}
@@ -60,16 +66,21 @@ func collectInvs(config *config.Config, client *rpcclient.RPCClient) (uint64, er
 	isRunning := true
 	invCount := uint64(0)
 	for peer, routes := range peersToRoutes {
+		routesCopy := routes
 		spawn(fmt.Sprintf("collectInvs-%s", peer), func() {
 			for {
 				if !isRunning {
+					routesCopy.Disconnect()
 					return
 				}
-				_, err := routes.WaitForMessageOfType(appmessage.CmdInvTransaction, time.Minute)
+				message, err := routesCopy.IncomingRoute.DequeueWithTimeout(time.Minute)
 				if err != nil {
+					routesCopy.Disconnect()
 					return
 				}
-				invCount++
+				if _, ok := message.(*appmessage.MsgInvTransaction); ok {
+					invCount++
+				}
 			}
 		})
 	}
