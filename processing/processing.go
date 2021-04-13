@@ -7,6 +7,7 @@ import (
 	configPackage "github.com/stasatdaglabs/kasboard/processing/infrastructure/config"
 	interruptPackage "github.com/stasatdaglabs/kasboard/processing/infrastructure/interrupt"
 	"github.com/stasatdaglabs/kasboard/processing/infrastructure/logging"
+	"github.com/stasatdaglabs/kasboard/processing/inv_collection"
 	"github.com/stasatdaglabs/kasboard/processing/kaspad_sync"
 	"github.com/stasatdaglabs/kasboard/processing/polling"
 	"os"
@@ -43,6 +44,7 @@ func main() {
 	}
 	analysis.Start(database, blockChan)
 	polling.Start(database, client)
+	inv_collection.Start(config, database, client)
 
 	<-interrupt
 }
