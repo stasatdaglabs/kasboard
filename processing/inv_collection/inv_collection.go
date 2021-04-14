@@ -32,32 +32,41 @@ func Start(config *config.Config, database *database.Database, client *rpcclient
 }
 
 func poll(config *config.Config, database *database.Database, client *rpcclient.RPCClient) error {
-	invCount, err := collectInvs(config, client)
+	countOfBlockInvs, countOfTransactionInvs, err := collectInvs(config, client)
+	if err != nil {
+		return err
+	}
+	timestamp := mstime.Now().UnixMilliseconds()
+	blockInvCount := &model.BlockInvCount{
+		Timestamp: timestamp,
+		Count:     countOfBlockInvs,
+	}
+	err = database.InsertBlockInvCount(blockInvCount)
 	if err != nil {
 		return err
 	}
 	transactionInvCount := &model.TransactionInvCount{
-		Timestamp: mstime.Now().UnixMilliseconds(),
-		Count:     invCount,
+		Timestamp: timestamp,
+		Count:     countOfTransactionInvs,
 	}
 	return database.InsertTransactionInvCount(transactionInvCount)
 }
 
-func collectInvs(config *config.Config, client *rpcclient.RPCClient) (uint32, error) {
+func collectInvs(config *config.Config, client *rpcclient.RPCClient) (uint32, uint32, error) {
 	minimalNetAdapter, err := buildMinimalNetAdapter(config)
 	if err != nil {
-		return 0, err
+		return 0, 0, err
 	}
 	connectedPeerInfo, err := client.GetConnectedPeerInfo()
 	if err != nil {
-		return 0, err
+		return 0, 0, err
 	}
 
 	peersToRoutes := make(map[string]*standalone.Routes)
 	for _, peerInfo := range connectedPeerInfo.Infos {
 		host, _, err := net.SplitHostPort(peerInfo.Address)
 		if err != nil {
-			return 0, err
+			return 0, 0, err
 		}
 		connectAddress := net.JoinHostPort(host, config.NetParams().DefaultPort)
 		routes, err := minimalNetAdapter.Connect(connectAddress)
@@ -68,7 +77,8 @@ func collectInvs(config *config.Config, client *rpcclient.RPCClient) (uint32, er
 	}
 
 	isRunning := true
-	invCount := uint32(0)
+	blockInvCount := uint32(0)
+	transactionInvCount := uint32(0)
 	for peer, routes := range peersToRoutes {
 		routesCopy := routes
 		spawn(fmt.Sprintf("collectInvs-%s", peer), func() {
@@ -82,8 +92,11 @@ func collectInvs(config *config.Config, client *rpcclient.RPCClient) (uint32, er
 					routesCopy.Disconnect()
 					return
 				}
-				if _, ok := message.(*appmessage.MsgInvTransaction); ok {
-					invCount++
+				switch message.(type) {
+				case *appmessage.MsgInvRelayBlock:
+					blockInvCount++
+				case *appmessage.MsgInvTransaction:
+					transactionInvCount++
 				}
 			}
 		})
@@ -91,7 +104,7 @@ func collectInvs(config *config.Config, client *rpcclient.RPCClient) (uint32, er
 	time.Sleep(time.Minute)
 	isRunning = false
 
-	return invCount, nil
+	return blockInvCount, transactionInvCount, nil
 }
 
 func buildMinimalNetAdapter(config *config.Config) (*standalone.MinimalNetAdapter, error) {

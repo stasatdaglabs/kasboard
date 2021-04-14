@@ -10,6 +10,12 @@ CREATE TABLE pruning_point_movements
     pruning_point_block_hash CHAR(64) NOT NULL
 );
 
+CREATE TABLE block_inv_counts
+(
+    timestamp BIGINT NOT NULL,
+    count     INT    NOT NULL
+);
+
 CREATE TABLE transaction_inv_counts
 (
     timestamp BIGINT NOT NULL,

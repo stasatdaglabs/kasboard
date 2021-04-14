@@ -48,6 +48,11 @@ type PruningPointMovement struct {
 	PruningPointBlockHash string `pg:",use_zero"`
 }
 
+type BlockInvCount struct {
+	Timestamp int64  `pg:",use_zero"`
+	Count     uint32 `pg:",use_zero"`
+}
+
 type TransactionInvCount struct {
 	Timestamp int64  `pg:",use_zero"`
 	Count     uint32 `pg:",use_zero"`
