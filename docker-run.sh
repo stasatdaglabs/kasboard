@@ -11,7 +11,7 @@ REQUIRED_VARIABLES["KASPAD_ADDRESS"]="${KASPAD_ADDRESS}"
 REQUIRED_VARIABLES["GRAFANA_ADMIN_USERNAME"]="${GRAFANA_ADMIN_USERNAME}"
 REQUIRED_VARIABLES["GRAFANA_ADMIN_PASSWORD"]="${GRAFANA_ADMIN_PASSWORD}"
 REQUIRED_VARIABLES["GRAFANA_PORT"]="${GRAFANA_PORT}"
-REQUIRED_VARIABLES["KASPAD_COMMIT_HASH"]="${KASPAD_COMMIT_HASH}"
+REQUIRED_VARIABLES["KASPAD_VERSION"]="${KASPAD_VERSION}"
 
 REQUIRED_VARIABLE_NOT_SET=false
 for REQUIRED_VARIABLE_NAME in "${!REQUIRED_VARIABLES[@]}"; do
@@ -31,7 +31,7 @@ if [ true = "${REQUIRED_VARIABLE_NOT_SET}" ]; then
 fi
 
 # Build the grafana and processing images
-docker build -f processing/Dockerfile -t kasboard-processing:latest --build-arg KASPAD_COMMIT_HASH="${KASPAD_COMMIT_HASH}" .
+docker build -f processing/Dockerfile -t kasboard-processing:latest --build-arg KASPAD_VERSION="${KASPAD_VERSION}" .
 docker build -f grafana/Dockerfile -t kasboard-grafana:latest .
 
 # Start postgres
