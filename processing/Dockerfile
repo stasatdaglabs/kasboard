@@ -28,6 +28,7 @@ COPY processing .
 # Restore go.mod and go.sum because `COPY processing .` overwrote them
 RUN mv go.mod.bu go.mod
 RUN mv go.sum.bu go.sum
+RUN go mod tidy
 
 RUN GOOS=linux go build -o processing .
 
