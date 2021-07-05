@@ -6,7 +6,7 @@ require (
 	github.com/go-pg/pg/v9 v9.1.3
 	github.com/golang-migrate/migrate/v4 v4.7.1
 	github.com/jessevdk/go-flags v1.5.0
-	github.com/kaspanet/kaspad v0.10.0-dev
+	github.com/kaspanet/kaspad v0.10.4
 	github.com/pkg/errors v0.9.1
 	golang.org/x/crypto v0.0.0-20210322153248-0c34fe9e7dc2 // indirect
 	golang.org/x/net v0.0.0-20210410081132-afb366fc7cd1 // indirect
