@@ -47,7 +47,7 @@ func handleBlockAddedNotifications(config *config.Config, database *database.Dat
 		BlueScore:         notification.Block.VerboseData.BlueScore,
 		Timestamp:         notification.Block.Header.Timestamp,
 		Hashrate:          hashrate,
-		ParentAmount:      uint16(len(notification.Block.Header.ParentHashes)),
+		ParentAmount:      uint16(len(notification.Block.Header.Parents[0].ParentHashes)),
 		TransactionAmount: uint16(len(notification.Block.Transactions)),
 	}
 	err = database.InsertBlock(block)
