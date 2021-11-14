@@ -62,8 +62,14 @@ func collectInvs(config *config.Config, client *rpcclient.RPCClient) (uint32, ui
 		return 0, 0, err
 	}
 
+
+	const maxPeersToConnectTo = 8
+	peerInfos := connectedPeerInfo.Infos
+	if len(peerInfos) > maxPeersToConnectTo {
+		peerInfos = peerInfos[:maxPeersToConnectTo]
+	}
 	peersToRoutes := make(map[string]*standalone.Routes)
-	for _, peerInfo := range connectedPeerInfo.Infos {
+	for _, peerInfo := range peerInfos {
 		host, _, err := net.SplitHostPort(peerInfo.Address)
 		if err != nil {
 			return 0, 0, err
