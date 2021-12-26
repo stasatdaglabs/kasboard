@@ -1,6 +1,7 @@
 package polling
 
 import (
+	concensusModel "github.com/kaspanet/kaspad/domain/consensus/model"
 	"github.com/kaspanet/kaspad/infrastructure/network/rpcclient"
 	"github.com/kaspanet/kaspad/util/mstime"
 	"github.com/kaspanet/kaspad/util/panics"
@@ -34,7 +35,11 @@ func poll(database *database.Database, client *rpcclient.RPCClient) error {
 	if err != nil {
 		return err
 	}
-	return pollMempoolSize(database, client)
+	err = pollMempoolSize(database, client)
+	if err != nil {
+		return err
+	}
+	return pollBlueHashrate(database, client)
 }
 
 func pollHeaderAmountAndBlockAmount(database *database.Database, client *rpcclient.RPCClient) error {
@@ -114,4 +119,18 @@ func pollMempoolSize(database *database.Database, client *rpcclient.RPCClient) e
 		Size:      getInfoResponse.MempoolSize,
 	}
 	return database.InsertMempoolSize(mempoolSize)
+}
+
+func pollBlueHashrate(database *database.Database, client *rpcclient.RPCClient) error {
+	virtualBlockHash := concensusModel.VirtualBlockHash.String()
+	estimateNetworkHashesPerSecondResponse, err := client.EstimateNetworkHashesPerSecond(virtualBlockHash, 1000)
+	if err != nil {
+		return err
+	}
+	timestamp := mstime.Now().UnixMilliseconds()
+	estimatedBlueHashrate := &model.EstimatedBlueHashrate{
+		Timestamp:    timestamp,
+		BlueHashrate: estimateNetworkHashesPerSecondResponse.NetworkHashesPerSecond,
+	}
+	return database.InsertEstimatedBlueHashrate(estimatedBlueHashrate)
 }

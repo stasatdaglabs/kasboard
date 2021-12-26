@@ -58,3 +58,8 @@ type TransactionInvCount struct {
 	Timestamp int64  `pg:",use_zero"`
 	Count     uint32 `pg:",use_zero"`
 }
+
+type EstimatedBlueHashrate struct {
+	Timestamp    int64  `pg:",use_zero"`
+	BlueHashrate uint64 `pg:",use_zero"`
+}

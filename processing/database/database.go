@@ -2,7 +2,7 @@ package database
 
 import (
 	"fmt"
-	"github.com/go-pg/pg/v9"
+	pg "github.com/go-pg/pg/v9"
 	"github.com/kaspanet/kaspad/util/mstime"
 	"github.com/pkg/errors"
 	"github.com/stasatdaglabs/kasboard/processing/database/model"
@@ -155,6 +155,10 @@ func (db *Database) InsertVirtualParentAmount(virtualParentAmount *model.Virtual
 
 func (db *Database) InsertMempoolSize(mempoolSize *model.MempoolSize) error {
 	return db.database.Insert(mempoolSize)
+}
+
+func (db *Database) InsertEstimatedBlueHashrate(estimatedBlueHashrate *model.EstimatedBlueHashrate) error {
+	return db.database.Insert(estimatedBlueHashrate)
 }
 
 func (db *Database) MostRecentPruningPointMovement() (*model.PruningPointMovement, error) {
