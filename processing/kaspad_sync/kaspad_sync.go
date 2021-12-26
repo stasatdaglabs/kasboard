@@ -42,6 +42,8 @@ func handleBlockAddedNotifications(config *config.Config, database *database.Dat
 	if err != nil {
 		return err
 	}
+	difficulty := hashratePackage.GetDifficultyRatio(notification.Block.Header.Bits, config.ActiveNetParams.PowMax)
+
 	block := &model.Block{
 		BlockHash:         notification.Block.VerboseData.Hash,
 		BlueScore:         notification.Block.VerboseData.BlueScore,
@@ -49,6 +51,7 @@ func handleBlockAddedNotifications(config *config.Config, database *database.Dat
 		Hashrate:          hashrate,
 		ParentAmount:      uint16(len(notification.Block.Header.Parents[0].ParentHashes)),
 		TransactionAmount: uint16(len(notification.Block.Transactions)),
+		Difficulty:        difficulty,
 	}
 	err = database.InsertBlock(block)
 	if err != nil {
