@@ -1087,7 +1087,7 @@
       "fieldConfig": {
         "defaults": {
           "custom": {},
-          "displayName": "Hashes/Second (estimated via Blue Work in block's past)",
+          "displayName": "Hashes/Second (estimated via Blue Work in the virtual block's past)",
           "unit": "Hs"
         },
         "overrides": []
