@@ -13,11 +13,12 @@ type Block struct {
 }
 
 type AnalyzedBlock struct {
-	ID                  uint64  `pg:",pk"`
-	Timestamp           int64   `pg:",use_zero"`
-	AverageParentAmount float64 `pg:",use_zero"`
-	BlockRate           float64 `pg:",use_zero"`
-	TransactionRate     float64 `pg:",use_zero"`
+	ID                      uint64  `pg:",pk"`
+	Timestamp               int64   `pg:",use_zero"`
+	AverageParentAmount     float64 `pg:",use_zero"`
+	BlockRate               float64 `pg:",use_zero"`
+	TransactionRate         float64 `pg:",use_zero"`
+	AveragePropagationDelay float64 `pg:",use_zero"`
 }
 
 type HeaderAmount struct {

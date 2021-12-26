@@ -133,6 +133,21 @@ func (db *Database) TransactionCountWithoutCoinbase(fromBlock *model.Block, dura
 	return result.TransactionAmount - result.BlockAmount, nil
 }
 
+func (db *Database) AveragePropagationDelay(fromBlock *model.Block, duration time.Duration) (float64, error) {
+	endTimestamp := mstime.UnixMilliseconds(fromBlock.Timestamp)
+	startTimestamp := endTimestamp.Add(-duration)
+
+	var result struct {
+		Average float64
+	}
+	_, err := db.database.QueryOne(&result, "SELECT AVG(propagation_delay) as average FROM blocks WHERE timestamp > ? AND timestamp < ?",
+		startTimestamp.UnixMilliseconds(), endTimestamp.UnixMilliseconds())
+	if err != nil {
+		return 0, err
+	}
+	return result.Average, nil
+}
+
 func (db *Database) InsertAnalyzedBlock(analyzedBlock *model.AnalyzedBlock) error {
 	return db.database.Insert(analyzedBlock)
 }

@@ -42,12 +42,18 @@ func handleBlock(database *database.Database, block *model.Block) error {
 	}
 	transactionRate := float64(transactionCount) / durationForAnalysis.Seconds()
 
+	averagePropagationDelay, err := database.AveragePropagationDelay(block, durationForAnalysis)
+	if err != nil {
+		return err
+	}
+
 	analyzedBlock := &model.AnalyzedBlock{
-		ID:                  block.ID,
-		Timestamp:           block.Timestamp,
-		AverageParentAmount: averageParentAmount,
-		BlockRate:           blockRate,
-		TransactionRate:     transactionRate,
+		ID:                      block.ID,
+		Timestamp:               block.Timestamp,
+		AverageParentAmount:     averageParentAmount,
+		BlockRate:               blockRate,
+		TransactionRate:         transactionRate,
+		AveragePropagationDelay: averagePropagationDelay,
 	}
 	err = database.InsertAnalyzedBlock(analyzedBlock)
 	if err != nil {
