@@ -3,6 +3,7 @@ package kaspad_sync
 import (
 	"github.com/kaspanet/kaspad/app/appmessage"
 	"github.com/kaspanet/kaspad/infrastructure/network/rpcclient"
+	"github.com/kaspanet/kaspad/util/mstime"
 	"github.com/kaspanet/kaspad/util/panics"
 	"github.com/stasatdaglabs/kasboard/processing/database"
 	"github.com/stasatdaglabs/kasboard/processing/database/model"
@@ -43,6 +44,7 @@ func handleBlockAddedNotifications(config *config.Config, database *database.Dat
 		return err
 	}
 	difficulty := hashratePackage.GetDifficultyRatio(notification.Block.Header.Bits, config.ActiveNetParams.PowMax)
+	blockTime := mstime.UnixMilliseconds(notification.Block.Header.Timestamp)
 
 	block := &model.Block{
 		BlockHash:         notification.Block.VerboseData.Hash,
@@ -52,6 +54,7 @@ func handleBlockAddedNotifications(config *config.Config, database *database.Dat
 		ParentAmount:      uint16(len(notification.Block.Header.Parents[0].ParentHashes)),
 		TransactionAmount: uint16(len(notification.Block.Transactions)),
 		Difficulty:        difficulty,
+		PropagationDelay:  mstime.Since(blockTime).Seconds(),
 	}
 	err = database.InsertBlock(block)
 	if err != nil {

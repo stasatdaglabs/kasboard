@@ -9,6 +9,7 @@ type Block struct {
 	ParentAmount      uint16  `pg:",use_zero"`
 	TransactionAmount uint16  `pg:",use_zero"`
 	Difficulty        float64 `pg:",use_zero"`
+	PropagationDelay  float64 `pg:",use_zero"`
 }
 
 type AnalyzedBlock struct {
