@@ -15,7 +15,6 @@
   "editable": true,
   "gnetId": null,
   "graphTooltip": 0,
-  "id": null,
   "links": [],
   "panels": [
     {
@@ -384,7 +383,7 @@
         "total": false,
         "values": false
       },
-      "lines": true,
+      "lines": false,
       "linewidth": 1,
       "nullPointMode": "null",
       "options": {
@@ -392,8 +391,8 @@
       },
       "percentage": false,
       "pluginVersion": "7.4.2",
-      "pointradius": 2,
-      "points": false,
+      "pointradius": 1,
+      "points": true,
       "renderer": "flot",
       "seriesOverrides": [],
       "spaceLength": 10,
@@ -1224,7 +1223,7 @@
         "total": false,
         "values": false
       },
-      "lines": true,
+      "lines": false,
       "linewidth": 1,
       "nullPointMode": "null",
       "options": {
@@ -1232,8 +1231,8 @@
       },
       "percentage": false,
       "pluginVersion": "7.4.2",
-      "pointradius": 2,
-      "points": false,
+      "pointradius": 1,
+      "points": true,
       "renderer": "flot",
       "seriesOverrides": [],
       "spaceLength": 10,
@@ -1771,5 +1770,5 @@
   "timezone": "browser",
   "title": "Kaspa",
   "uid": "dYWAHnyMk",
-  "version": 1
+  "version": 2
 }
